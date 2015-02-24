@@ -9,11 +9,13 @@ var mongoose = require('mongoose'),
         location: String,
         description: String,
         volunteerJobs: [{
+            _id: false,
             title: String,
             number: Number,
             skills: [String]
         }],
         messages: [{
+            _id: false,
             username: String,
             body: String,
             date: Date
