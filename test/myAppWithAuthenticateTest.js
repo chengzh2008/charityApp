@@ -17,7 +17,7 @@ function getRandomOrganizerObject() {
     var typeOfOrganizer = ['animal', 'education', 'Christian', 'homelessness'];
     return {
         email: chance.string(10) + '@' + chance.string(5) + '.com',
-        name: chance.string(15),
+        username: chance.string(15),
         contactPerson: {
             firstname: chance.string(15),
             lastname: chance.string(15)
@@ -31,7 +31,7 @@ function getRandomOrganizerObject() {
         },
         phone: chance.phone(),
         createdSince: new Date().toJSON(),
-        events: []
+        events: [chance.string(15)]
     };
 }
 
@@ -96,7 +96,6 @@ describe('organizers api end points', function () {
                 var returnedOrganizer = res.body;
                 delete returnedOrganizer._id;
                 delete returnedOrganizer.__v;
-                console.log('testing...', returnedOrganizer);
                 expect(returnedOrganizer).to.deep.eql(organizerA);
                 done();
             });

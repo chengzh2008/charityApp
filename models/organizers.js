@@ -1,10 +1,9 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    eventSchema = new mongoose.Schema({}),
     organizerSchema = new mongoose.Schema({
         email: String,
-        name: String,
+        username: String,
         contactPerson: {
             firstname: String,
             lastname: String
@@ -19,7 +18,7 @@ var mongoose = require('mongoose'),
         },
         phone: String,
         createdSince: {type: Date, default: Date.now},
-        events: [eventSchema]
+        events: [String]
     });
 
 module.exports = mongoose.model('Organizer', organizerSchema);
