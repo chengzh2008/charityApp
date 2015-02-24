@@ -1,10 +1,9 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    eventSchema = new mongoose.Schema({}),
     organizerSchema = new mongoose.Schema({
         email: String,
-        name: String,
+        username: String,
         contactPerson: {
             firstname: String,
             lastname: String
