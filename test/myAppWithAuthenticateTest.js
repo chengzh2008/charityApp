@@ -31,7 +31,7 @@ function getRandomOrganizerObject() {
         },
         phone: chance.phone(),
         createdSince: new Date().toJSON(),
-        events: []
+        events: [chance.string(15)]
     };
 }
 

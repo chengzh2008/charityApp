@@ -18,7 +18,7 @@ var mongoose = require('mongoose'),
         },
         phone: String,
         createdSince: {type: Date, default: Date.now},
-        events: [eventSchema]
+        events: [String]
     });
 
 module.exports = mongoose.model('Organizer', organizerSchema);
