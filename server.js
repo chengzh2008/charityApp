@@ -2,14 +2,17 @@
 
 var express = require('express')
     , mongoose = require('mongoose')
+    , path = require('path')
     // requite routes
     , oganizerRoutes = require('./routes/organizer_routes')
     , eventRoutes = require('./routes/event_routes')
     , userRoutes = require('./routes/users_routes')
+    , imageRoutes = require('./routes/image_routes')
     , app = express()
     , organizerRouter = express.Router()
     , userRouter = express.Router()
     , eventRouter = express.Router()
+    , imageRouter = express.Router()
     , passport = require('passport')
     , passportStrategy = require('./lib/passport_strat');
 
@@ -20,13 +23,19 @@ module.exports = {
         app.use(passport.initialize());
         passportStrategy(passport);
 
+
         userRoutes(userRouter, passport, app.get('appSecret'));
         oganizerRoutes(organizerRouter, app.get('appSecret'));
         eventRoutes(eventRouter, app.get('appSecret'));
+        imageRoutes(imageRouter, app.get('appSecret'));
+
         // add routers
         app.use('/api/v1', userRouter);
         app.use('/api/v1', organizerRouter);
         app.use('/api/v1', eventRouter);
+        app.use('/api/v1', imageRouter);
+        app.use(express.static(path.join(__dirname, 'public')));
+
 
         app.listen(process.env.PORT || 3000, function () {
             console.log('Server is running on port ' + (process.env.PORT || 3000));

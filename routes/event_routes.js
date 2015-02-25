@@ -48,6 +48,4 @@ module.exports = function (router, appSecret) {
             res.json({msg: 'Your doc has been removed: ID ' + req.params.id});
         });
     });
-
-
 };

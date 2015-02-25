@@ -6,14 +6,14 @@ var mongoose = require('mongoose'),
         orgName: String,
         firstname: String,
         lastname: String,
-        logo: {data: Buffer, contentType: String},
-        type: String,
         mission: String,
         address: String,
         city: String,
         phone: String,
+        type: String,
         website: String,
-        createdSince: {type: Date, default: Date.now}
+        createdSince: {type: Date, default: Date.now},
+        events: [String]
     });
 
 module.exports = mongoose.model('Organizer', organizerSchema);
