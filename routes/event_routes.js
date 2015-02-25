@@ -32,6 +32,9 @@ module.exports = function (router, appSecret) {
 
     router.put('/events/:id', eatAuth(appSecret), function (req, res) {
         var updatedEvent = req.body;
+        if (req.user.basic.email !== req.params.id) {
+            return res.status(500).send({'msg': 'unauthorized request'});
+        }
         Event.update({_id: req.params.id}, updatedEvent, function (err, result) {
             if (err) {
                 return res.status(500).send({'msg': 'Could not find events'});
@@ -41,6 +44,9 @@ module.exports = function (router, appSecret) {
     });
 
     router.delete('/events/:id', eatAuth(appSecret), function (req, res) {
+        if (req.user.basic.email !== req.params.id) {
+            return res.status(500).send({'msg': 'unauthorized request'});
+        }
         Event.remove({_id: req.params.id}, function (err, result) {
             if (err) {
                 return res.status(500).send({'msg': 'Could not find events'});

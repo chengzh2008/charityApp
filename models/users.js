@@ -9,7 +9,6 @@ var mongoose = require('mongoose'),
             email: String,
             password: String
         },
-        username: String,
         role: {type: String, enum: ['volunteer', 'organizer']} // volunteer or organizer
     });
 

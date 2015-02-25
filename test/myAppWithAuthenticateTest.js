@@ -27,7 +27,7 @@ function getRandomOrganizerObject() {
         phone: chance.phone(),
         website: chance.url(),
         createdSince: new Date().toJSON(),
-        events:[chance.string(15), chance.string(15)]
+        events: [chance.string(15), chance.string(15)]
     };
 }
 
@@ -39,11 +39,15 @@ function getRandomAddress() {
 function getRandomUser() {
     var types = ['volunteer', 'organizer'];
     return {
-        email: chance.string(10) + '@' + chance.string(5) + '.com',
-        password: chance.string(30),
+        basic: {
+            email: chance.string(10) + '@' + chance.string(5) + '.com',
+            password: chance.string(30)
+        },
         role: types[chance.natural({min: 0, max: types.length - 1})]
     }
 }
+
+
 
 function getRandomEvent() {
     return {
@@ -88,8 +92,15 @@ describe('organizers api end points', function () {
         organizerE = getRandomOrganizerObject(),
 
         userA = getRandomUser(),
-        userB = getRandomUser();
-
+        userB = getRandomUser(),
+        userC = getRandomUser(),
+        userD = getRandomUser(),
+        userE = getRandomUser();
+    organizerA.email = userA.email = 'bill@example.com';
+    organizerB.email = userB.email = 'bill@example.com';
+    organizerC.email = userC.email = 'cathy@example.com';
+    organizerD.email = userD.email = 'dana@example.com';
+    organizerE.email = userE.email = 'ellen@example.com';
 
     before(function (done) {
         chai.request(serverUrl)
@@ -120,6 +131,7 @@ describe('organizers api end points', function () {
     })
 
     it('should respond to a post request', function (done) {
+        organizerA.email = userA.email;
         chai.request(serverUrl)
             .post('/organizers')
             .send(organizerA)
@@ -135,13 +147,14 @@ describe('organizers api end points', function () {
     });
 
     it('should respond to a get request', function (done) {
+        organizerA.email = userA.email;
         chai.request(serverUrl)
-            .get('/organizers')
+            .get('/organizers/' + organizerA.email)
             .send()
             .set('token', token)
             .end(function (err, res) {
                 expect(err).to.eql(null);
-                var returnedorganizer = res.body[0];
+                var returnedorganizer = res.body;
                 delete returnedorganizer._id;
                 delete returnedorganizer.__v;
                 expect(returnedorganizer).to.eql(organizerA);
@@ -151,7 +164,7 @@ describe('organizers api end points', function () {
 
     it('should not respond to a get request', function (done) {
         chai.request(serverUrl)
-            .get('/organizers')
+            .get('/organizers/' + organizerA.email)
             .send()
             .end(function (err, res) {
                 expect(err).to.eql(null);
@@ -162,20 +175,20 @@ describe('organizers api end points', function () {
 
     describe('delete test without and with token', function () {
         var id;
+        organizerC.email = organizerA.email;
         before(function (done) {
             chai.request(serverUrl)
                 .post('/organizers')
                 .send(organizerC)
                 .set('token', token)
                 .end(function (err, res) {
-                    id = res.body._id;
                     done();
                 })
         });
 
         it('should not respond to a delete request without token', function (done) {
             chai.request(serverUrl)
-                .delete('/organizers/' + id)
+                .delete('/organizers/' + organizerA.email)
                 .send()
                 .end(function (err, res) {
                     expect(err).to.eql(null);
@@ -185,13 +198,14 @@ describe('organizers api end points', function () {
         });
 
         it('should get to the organizerA', function (done) {
+            organizerC.email = organizerA.email;
             chai.request(serverUrl)
-                .get('/organizers')
+                .get('/organizers/' + organizerA.email)
                 .send()
                 .set('token', token)
                 .end(function (err, res) {
                     expect(err).to.eql(null);
-                    var returnedorganizer = res.body[1];
+                    var returnedorganizer = res.body;
                     delete returnedorganizer._id;
                     delete returnedorganizer.__v;
                     expect(returnedorganizer).to.eql(organizerC);
@@ -199,38 +213,15 @@ describe('organizers api end points', function () {
                 });
         });
 
-        it('should get 2 organizers', function (done) {
-            chai.request(serverUrl)
-                .get('/organizers')
-                .send()
-                .set('token', token)
-                .end(function (err, res) {
-                    expect(err).to.eql(null);
-                    expect(res.body.length).to.eql(2);
-                    done();
-                });
-        });
 
         it('should respond to a delete request with token', function (done) {
             chai.request(serverUrl)
-                .delete('/organizers/' + id)
+                .delete('/organizers/' + organizerA.email)
                 .send()
                 .set('token', token)
                 .end(function (err, res) {
                     expect(err).to.eql(null);
                     expect(res.body.msg).to.eql("Your doc has been removed: ID " + id);
-                    done();
-                });
-        });
-
-        it('should get 1 organizer after delete request', function (done) {
-            chai.request(serverUrl)
-                .get('/organizers')
-                .send()
-                .set('token', token)
-                .end(function (err, res) {
-                    expect(err).to.eql(null);
-                    expect(res.body.length).to.eql(1);
                     done();
                 });
         });

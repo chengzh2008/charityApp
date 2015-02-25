@@ -21,18 +21,24 @@ module.exports = function (router, appSecret) {
         });
     });
 
-    router.get('/organizers', eatAuth(appSecret), function (req, res) {
-        Organizer.find({}, function (err, data) {
+    router.get('/organizers/:id', eatAuth(appSecret), function (req, res) {
+        if (req.user.basic.email !== req.params.id) {
+            return res.status(500).send({'msg': 'unauthorized request'});
+        }
+        Organizer.findOne({email: req.params.id}, function (err, organizer) {
             if (err) {
                 return res.status(500).send({'msg': 'Could not find organizers'});
             }
-            res.json(data);
+            res.json(organizer);
         });
     });
 
     router.put('/organizers/:id', eatAuth(appSecret), function (req, res) {
         var updatedOrganizer = req.body;
-        Organizer.update({_id: req.params.id}, updatedOrganizer, function (err, result) {
+        if (req.user.basic.email !== req.params.id) {
+            return res.status(500).send({'msg': 'unauthorized request'});
+        }
+        Organizer.update({email: req.params.id}, updatedOrganizer, function (err, result) {
             if (err) {
                 return res.status(500).send({'msg': 'Could not find organizers'});
             }
@@ -41,7 +47,10 @@ module.exports = function (router, appSecret) {
     });
 
     router.delete('/organizers/:id', eatAuth(appSecret), function (req, res) {
-        Organizer.remove({_id: req.params.id}, function (err, result) {
+        if (req.user.basic.email !== req.params.id) {
+            return res.status(500).send({'msg': 'unauthorized request'});
+        }
+        Organizer.remove({email: req.params.id}, function (err, result) {
             if (err) {
                 return res.status(500).send({'msg': 'Could not find organizers'});
             }
