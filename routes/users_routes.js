@@ -15,18 +15,6 @@ module.exports = function (app, passport, appSecret) {
         newUser.basic.email = req.body.email;
         newUser.basic.password = newUser.generateHashedPassword(req.body.password);
         newUser.role = req.body.role;
-        // make it separate request.
-        //var newUserProfile = new Organizer();
-        //newUserProfile.email = req.body.email;
-        //newUserProfile.name = req.body.name;
-        //newUserProfile.contactPerson = req.body.contactPerson || {firstname: '', lastname: ''};
-        //newUserProfile.type = req.body.type; // type of organization
-        //newUserProfile.mission = req.body.type;
-        //newUserProfile.address = req.body.address;
-        //newUserProfile.phone = req.body.phone;
-        //newUserProfile.createdSince = new Date();
-        //newUserProfile.events = [];
-
 
         newUser.save(function (err, user) {
             if (err) return res.status(500).send({msg: 'can not create user'});
