@@ -8,15 +8,15 @@ module.exports = function (vol_router, appSecret) {
     vol_router.use(bodyparser.json());
 
     // POST
-    vol_router.post('/volunteer', eat_auth(appSecret), function (req, res) {
-        var newVolunteer = new Volunteer(req.body);
-        newVolunteer.save(function (err, volunteer) {
-            if (err) //throw err;
-                return res.status(500).send({'msg': 'could not save volunteer'});
-            res.json(volunteer);
-        });
-
-    });
+    //vol_router.post('/volunteer', eat_auth(appSecret), function (req, res) {
+    //    var newVolunteer = new Volunteer(req.body);
+    //    newVolunteer.save(function (err, volunteer) {
+    //        if (err) //throw err;
+    //            return res.status(500).send({'msg': 'could not save volunteer'});
+    //        res.json(volunteer);
+    //    });
+    //
+    //});
 
 
     // PUT - replace existing object
