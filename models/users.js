@@ -9,6 +9,7 @@ var mongoose = require('mongoose'),
             email: String,
             password: String
         },
+        username: String,
         role: {type: String, enum: ['volunteer', 'organizer']} // volunteer or organizer
     });
 
@@ -23,7 +24,7 @@ userSchema.methods.validPassword = function (password) {
 };
 
 userSchema.methods.generateToken = function(appSecret, callback) {
-    eat.encode({id: this._id, timestamp: new Date()}, appSecret, callback);
+    eat.encode({id: this.basic.email, timestamp: new Date()}, appSecret, callback);
 };
 
 module.exports = mongoose.model('User', userSchema);

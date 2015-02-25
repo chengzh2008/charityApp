@@ -3,20 +3,15 @@
 var mongoose = require('mongoose'),
     organizerSchema = new mongoose.Schema({
         email: String,
-        username: String,
-        contactPerson: {
-            firstname: String,
-            lastname: String
-        },
-        logo: {data: Buffer, contentType: String},
-        type: {type: String, enum: ['animal', 'education', 'Christian', 'homelessness']}, // type of organization
+        orgName: String,
+        firstname: String,
+        lastname: String,
         mission: String,
-        address: {
-            line: String,
-            state: String,
-            zip: String
-        },
+        address: String,
+        city: String,
         phone: String,
+        type: String,
+        website: String,
         createdSince: {type: Date, default: Date.now},
         events: [String]
     });
