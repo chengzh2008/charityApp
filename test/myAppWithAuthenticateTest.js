@@ -26,7 +26,8 @@ function getRandomOrganizerObject() {
         city: chance.string(9),
         phone: chance.phone(),
         website: chance.url(),
-        createdSince: new Date().toJSON()
+        createdSince: new Date().toJSON(),
+        events:[chance.string(15), chance.string(15)]
     };
 }
 
@@ -47,6 +48,8 @@ function getRandomUser() {
 function getRandomEvent() {
     return {
         eventId: chance.string(20),
+        organizerId: chance.string(15),
+        volunteerId: chance.string(15),
         title: chance.string(50),
         date: new Date().toJSON(),
         time: new Date().toJSON(),

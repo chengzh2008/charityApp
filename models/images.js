@@ -1,3 +1,9 @@
-/**
- * Created by xiaoyazi on 2/24/15.
- */
+'use strict';
+
+var mongoose = require('mongoose'),
+    imageSchema = new mongoose.Schema({
+        email: String,
+        imgUrl: String
+    });
+
+module.exports = mongoose.model('Image', imageSchema);
