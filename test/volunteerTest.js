@@ -15,21 +15,17 @@ function getRandomVolunteerObject() {
     var typeOfCauses = ['animal', 'education', 'Christian', 'homelessness'];
     return {
         email: chance.string(10) + '@' + chance.string(5) + '.com',
+        role :'volunteer',
         name: {
             firstname: chance.string(15),
             lastname: chance.string(15)
         },
-        age18: 'yes',
-        address: {
-            line: chance.address(),
-            state: chance.state(),
-            zip: chance.zip()
-        },
-        aboutme: chance.paragraph({sentences: 2}),
+        ageReq: true,
+        city: chance.city(),
+        bio: chance.paragraph({sentences: 2}),
         causes: [typeOfCauses[chance.natural({min: 0, max: typeOfCauses.length - 1})]], // type of causes        skills: [chance.string(15)],
         skills: [chance.string(15)],
         events: [chance.string(15)]
-    };
 }
 
 
@@ -75,7 +71,7 @@ describe('POST - Charity App, Volunteer route testing', function () {
     before(function (done) {
         chai.request(serverURL)
             .post('/create_user')
-            .send(userA)  //({email:'jane1@example.com', password:'doe123', role:'volunteer'})
+            .send(userA)  
             .end(function (err, res) {
                 token = res.body.token;
                 done();
@@ -91,7 +87,7 @@ describe('POST - Charity App, Volunteer route testing', function () {
     it('POST - record value', function (done) {
         chai.request(serverURL)
             .post('/volunteer')
-            .send(volunteerA)//{name:{first_name: 'Jane', last_name: 'Doe'}})
+            .send(volunteerA)
             .set('token', token)
             .end(function (err, res) {
                 expect(err).to.eql(null);
