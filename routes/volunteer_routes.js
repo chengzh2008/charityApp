@@ -7,20 +7,8 @@ module.exports = function (vol_router, appSecret) {
 
     vol_router.use(bodyparser.json());
 
-    // POST
-    //vol_router.post('/volunteer', eat_auth(appSecret), function (req, res) {
-    //    var newVolunteer = new Volunteer(req.body);
-    //    newVolunteer.save(function (err, volunteer) {
-    //        if (err) //throw err;
-    //            return res.status(500).send({'msg': 'could not save volunteer'});
-    //        res.json(volunteer);
-    //    });
-    //
-    //});
-
-
     // PUT - replace existing object
-    vol_router.put('/volunteer/:id', eat_auth(appSecret), function (req, res) {
+    vol_router.put('/volunteers/:id', eat_auth(appSecret), function (req, res) {
         var updateVolunteer = req.body;
         var query = {'email': req.params.id};
         if (req.user.basic.email !== req.params.id) {
@@ -35,7 +23,7 @@ module.exports = function (vol_router, appSecret) {
     });
 
     // GET
-    vol_router.get('/volunteer/:id', eat_auth(appSecret), function (req, res) {
+    vol_router.get('/volunteers/:id', eat_auth(appSecret), function (req, res) {
         var query = {'email': req.params.id};
         if (req.user.basic.email !== req.params.id) {
             return res.status(500).send({'msg': 'unauthorized request'});
@@ -48,7 +36,7 @@ module.exports = function (vol_router, appSecret) {
     });
 
     // DELETE
-    vol_router.delete('/volunteer/:id', eat_auth(appSecret), function (req, res) {
+    vol_router.delete('/volunteers/:id', eat_auth(appSecret), function (req, res) {
         var query = {'email': req.params.id};
         if (req.user.basic.email !== req.params.id) {
             return res.status(500).send({'msg': 'unauthorized request'});

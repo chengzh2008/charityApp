@@ -11,16 +11,6 @@ module.exports = function (router, appSecret) {
     // middleware to log the request, should be placed before those request.
     router.use(logger());
 
-    router.post('/organizers', eatAuth(appSecret), function (req, res) {
-        var newOrganizer = new Organizer(req.body);
-        newOrganizer.save(function (err, organizer) {
-            if (err) {
-                return res.status(500).send({'msg': 'Could not save a blog'});
-            }
-            res.json(organizer);
-        });
-    });
-
     router.get('/organizers/:id', eatAuth(appSecret), function (req, res) {
         if (req.user.basic.email !== req.params.id) {
             return res.status(500).send({'msg': 'unauthorized request'});

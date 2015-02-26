@@ -18,7 +18,7 @@ module.exports = function (app, passport, appSecret) {
     });
 
     app.post('/create_user_organizer', function (req, res) {
-        processUser(Volunteer, req, res, appSecret);
+        processUser(Organizer, req, res, appSecret);
     });
 
     app.get('/sign_in', passport.authenticate('basic', {session: false}), function (req, res) {

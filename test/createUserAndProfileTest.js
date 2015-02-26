@@ -122,7 +122,7 @@ function getRandomEvent() {
     }
 }
 
-describe('volunteers api end points', function () {
+describe('create volunteer user profile and login', function () {
     var token,
         volunteerA = getRandomVolunteerAndProfile();
     volunteerA.credential.basic.email = "abc@abc.com";
@@ -182,6 +182,72 @@ describe('volunteers api end points', function () {
                 delete returnInfo._id;
                 delete returnInfo.__v;
                 expect(returnInfo).to.deep.eql(volunteerA.profileInfo);
+                done();
+            })
+    });
+});
+
+
+describe('create organizer user profile and login', function () {
+    var token,
+        organizerA = getRandomOrganizerAndProfile();
+    organizerA.credential.basic.email = "def@def.com";
+    organizerA.profileInfo.email =  "def@def.com";
+    organizerA.credential.basic.password = '12345';
+
+
+    after(function (done) {
+        mongoose.connection.db.dropDatabase(function () {
+            done();
+        });
+    });
+
+    it('should create a organizer user and return a token', function (done) {
+        console.log(JSON.stringify(organizerA));
+        chai.request(serverUrl)
+            .post('/create_user_organizer')
+            .send(organizerA)
+            .end(function (err, res) {
+                expect(err).to.eql(null);
+                expect(res.body).to.have.property('token')
+                var returnInfo = res.body;
+                delete returnInfo.profileInfo._id;
+                delete returnInfo.profileInfo.__v;
+                token = returnInfo.token;
+                expect(returnInfo.profileInfo).to.deep.eql(organizerA.profileInfo);
+                done();
+            })
+    });
+
+    it('should login as the organizer user and return a token', function (done) {
+        //console.log(JSON.stringify(userObjectA));
+        chai.request(serverUrl)
+            .get('/sign_in')
+            .auth(organizerA.credential.basic.email, organizerA.credential.basic.password)
+            .send()
+            .end(function (err, res) {
+                expect(err).to.eql(null);
+                expect(res.body).to.have.property('token');
+                var returnInfo = res.body;
+                delete returnInfo.profileInfo._id;
+                delete returnInfo.profileInfo.__v;
+                console.log('testing...', returnInfo.token);
+                expect(returnInfo.profileInfo).to.deep.eql(organizerA.profileInfo);
+                done();
+            })
+    });
+
+    it('should get a organizer user profile with token', function (done) {
+        console.log(JSON.stringify(organizerA));
+        chai.request(serverUrl)
+            .get('/organizers/' + organizerA.credential.basic.email)
+            .send({token: token})
+            .end(function (err, res) {
+                expect(err).to.eql(null);
+                var returnInfo = res.body;
+                delete returnInfo._id;
+                delete returnInfo.__v;
+                expect(returnInfo).to.deep.eql(organizerA.profileInfo);
                 done();
             })
     });
