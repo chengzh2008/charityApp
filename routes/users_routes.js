@@ -20,7 +20,7 @@ module.exports = function (app, passport, appSecret) {
             if (result) {
                 return res.status(500).send({msg: 'user exists'});
             }
-
+            newUser.basic.password = newUser.generateHashedPassword(newUser.basic.password);
             newUser.save(function (err, user) {
                 if (err) return res.status(500).send({msg: 'can not create user'});
                 user.generateToken(appSecret, function (err, token) {
@@ -50,7 +50,10 @@ module.exports = function (app, passport, appSecret) {
                     if(err) {
                         return res.status(500).send({msg: 'can not login user'});
                     }
-                   res.json(volunteer);
+                   res.json({
+                       token: token,
+                       profileInfo: volunteer
+                   });
                 });
             }
         });
