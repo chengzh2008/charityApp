@@ -35,7 +35,7 @@ module.exports = function (router, appSecret) {
         if (req.user.basic.email !== req.params.id) {
             return res.status(500).send({'msg': 'unauthorized request'});
         }
-        Event.update({_id: req.params.id}, updatedEvent, function (err, result) {
+        Event.update({organizerId: req.params.id}, updatedEvent, function (err, result) {
             if (err) {
                 return res.status(500).send({'msg': 'Could not find events'});
             }

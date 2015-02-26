@@ -93,8 +93,8 @@ function getRandomEvent() {
     return {
         eventId: chance.string(20),
         organizerId: chance.string(15),
-        volunteerId: chance.string(15),
-        title: chance.string(50),
+        volunteerId: '',
+        title: chance.paragraph({sentences: 1}),
         date: new Date().toJSON(),
         time: new Date().toJSON(),
         location: chance.string(10),
@@ -122,15 +122,12 @@ function getRandomEvent() {
     }
 }
 
-describe('volunteers api end points', function () {
+describe('create volunteer user profile and login', function () {
     var token,
         volunteerA = getRandomVolunteerAndProfile();
     volunteerA.credential.basic.email = "abc@abc.com";
     volunteerA.profileInfo.email =  "abc@abc.com";
     volunteerA.credential.basic.password = '12345';
-
-console.log('generating ...', JSON.stringify(volunteerA));
-    var token;
 
 
     after(function (done) {
@@ -140,7 +137,7 @@ console.log('generating ...', JSON.stringify(volunteerA));
     });
 
     it('should create a volunteer user and return a token', function (done) {
-        console.log(JSON.stringify(volunteerA));
+
         chai.request(serverUrl)
             .post('/create_user_volunteer')
             .send(volunteerA)
@@ -156,9 +153,7 @@ console.log('generating ...', JSON.stringify(volunteerA));
             })
     });
 
-
     it('should login as the volunteer user and return a token', function (done) {
-        //console.log(JSON.stringify(userObjectA));
         chai.request(serverUrl)
             .get('/sign_in')
             .auth(volunteerA.credential.basic.email, volunteerA.credential.basic.password)
@@ -169,17 +164,14 @@ console.log('generating ...', JSON.stringify(volunteerA));
                 var returnInfo = res.body;
                 delete returnInfo.profileInfo._id;
                 delete returnInfo.profileInfo.__v;
-                console.log('testing...', returnInfo.token);
-                console.log('testing...more', returnInfo.profileInfo);
                 expect(returnInfo.profileInfo).to.deep.eql(volunteerA.profileInfo);
                 done();
             })
     });
 
     it('should get a volunter user profile with token', function (done) {
-        console.log(JSON.stringify(volunteerA));
         chai.request(serverUrl)
-            .get('/volunteer/' + volunteerA.credential.basic.email)
+            .get('/volunteers/' + volunteerA.credential.basic.email)
             .send({token: token})
             .end(function (err, res) {
                 expect(err).to.eql(null);
@@ -190,19 +182,133 @@ console.log('generating ...', JSON.stringify(volunteerA));
                 done();
             })
     });
+});
 
-    //it('should respond to a get request', function (done) {
-    //    chai.request(serverUrl)
-    //        .get('/organizers')
-    //        .send()
-    //        .set('token', token)
-    //        .end(function (err, res) {
-    //            expect(err).to.eql(null);
-    //            var returnedorganizer = res.body[0];
-    //            delete returnedorganizer._id;
-    //            delete returnedorganizer.__v;
-    //            expect(returnedorganizer).to.eql(organizerA);
-    //            done();
-    //        });
-    //});
+
+describe('create organizer user profile and login', function () {
+    var token,
+        organizerA = getRandomOrganizerAndProfile();
+    organizerA.credential.basic.email = "def@def.com";
+    organizerA.profileInfo.email =  "def@def.com";
+    organizerA.credential.basic.password = '12345';
+
+
+    after(function (done) {
+        mongoose.connection.db.dropDatabase(function () {
+            done();
+        });
+    });
+
+    it('should create a organizer user and return a token', function (done) {
+        chai.request(serverUrl)
+            .post('/create_user_organizer')
+            .send(organizerA)
+            .end(function (err, res) {
+                expect(err).to.eql(null);
+                expect(res.body).to.have.property('token')
+                var returnInfo = res.body;
+                delete returnInfo.profileInfo._id;
+                delete returnInfo.profileInfo.__v;
+                token = returnInfo.token;
+                expect(returnInfo.profileInfo).to.deep.eql(organizerA.profileInfo);
+                done();
+            })
+    });
+
+    it('should login as the organizer user and return a token', function (done) {
+        chai.request(serverUrl)
+            .get('/sign_in')
+            .auth(organizerA.credential.basic.email, organizerA.credential.basic.password)
+            .send()
+            .end(function (err, res) {
+                expect(err).to.eql(null);
+                expect(res.body).to.have.property('token');
+                var returnInfo = res.body;
+                delete returnInfo.profileInfo._id;
+                delete returnInfo.profileInfo.__v;
+                expect(returnInfo.profileInfo).to.deep.eql(organizerA.profileInfo);
+                done();
+            })
+    });
+
+    it('should get a organizer user profile with token', function (done) {
+        chai.request(serverUrl)
+            .get('/organizers/' + organizerA.credential.basic.email)
+            .send({token: token})
+            .end(function (err, res) {
+                expect(err).to.eql(null);
+                var returnInfo = res.body;
+                delete returnInfo._id;
+                delete returnInfo.__v;
+                expect(returnInfo).to.deep.eql(organizerA.profileInfo);
+                done();
+            })
+    });
+});
+
+
+describe('create event by organizer user', function () {
+    var token,
+        organizerA = getRandomOrganizerAndProfile();
+    organizerA.credential.basic.email = "def@def.com";
+    organizerA.profileInfo.email =  "def@def.com";
+    organizerA.credential.basic.password = '12345';
+
+    var eventA = getRandomEvent();
+    eventA.organizerId = organizerA.profileInfo.email;
+    var eventB = getRandomEvent();
+    eventB.organizerId = organizerA.profileInfo.email;
+
+    after(function (done) {
+        mongoose.connection.db.dropDatabase(function () {
+            done();
+        });
+    });
+
+    it('should create a organizer user and return a token', function (done) {
+        chai.request(serverUrl)
+            .post('/create_user_organizer')
+            .send(organizerA)
+            .end(function (err, res) {
+                expect(err).to.eql(null);
+                expect(res.body).to.have.property('token')
+                var returnInfo = res.body;
+                delete returnInfo.profileInfo._id;
+                delete returnInfo.profileInfo.__v;
+                token = returnInfo.token;
+                expect(returnInfo.profileInfo).to.deep.eql(organizerA.profileInfo);
+                done();
+            })
+    });
+
+
+    it('should create an event with this organizer', function (done) {
+        chai.request(serverUrl)
+            .post('/events')
+            .set('token', token)
+            .send(eventA)
+            .end(function (err, res) {
+                expect(err).to.eql(null);
+                var returnInfo = res.body;
+                delete returnInfo._id;
+                delete returnInfo.__v;
+                expect(returnInfo).to.deep.eql(eventA);
+                done();
+            })
+    });
+
+    it('should create an event with this organizer', function (done) {
+        chai.request(serverUrl)
+            .put('/events/' + eventA.organizerId)
+            .set('token', token)
+            .send(eventB)
+            .end(function (err, res) {
+                expect(err).to.eql(null);
+                var returnInfo = res.body;
+                delete returnInfo._id;
+                delete returnInfo.__v;
+                expect(returnInfo).to.deep.eql(eventB);
+                done();
+            })
+    });
 });
