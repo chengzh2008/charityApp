@@ -10,11 +10,7 @@ var volunteerSchema = new mongoose.Schema({
 		lastname:String
 	},
 	age18:String,
-	address:{
-		line :String,
-		state:String,
-		zip  :String
-	},
+	address: String,
 	profilepic: {data: Buffer, contentType: String},
 	aboutme: String,
  	causes: {type:[String]},
