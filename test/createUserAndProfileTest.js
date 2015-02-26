@@ -17,6 +17,7 @@ function getRandomOrganizerObject() {
     var typeOfOrganizer = ['animal', 'education', 'Christian', 'homelessness'];
     return {
         email: chance.string(5) + '@' + chance.string(3) + '.com',
+        role:'organizer',
         orgName: chance.string(15),
         firstname: chance.string(15),
         lastname: chance.string(15),
@@ -75,14 +76,16 @@ function getRandomOrganizerAndProfile() {
 function getRandomVolunteerObject() {
     var typeOfCauses = ['animal', 'education', 'Christian', 'homelessness'];
     return {
+
         email: chance.string(4) + '@' + chance.string(3) + '.com',
+        role:"volunteer",
         name: {
             firstname: chance.string(15),
             lastname: chance.string(15)
         },
-        age18: 'yes',
-        address: getRandomAddress(),
-        aboutme: chance.paragraph({sentences: 2}),
+        ageReq: true,
+        city: chance.city(),
+        bio: chance.paragraph({sentences: 2}),
         causes: [typeOfCauses[chance.natural({min: 0, max: typeOfCauses.length - 1})]], // type of causes        skills: [chance.string(15)],
         skills: [chance.string(15)],
         events: [chance.string(15)]
