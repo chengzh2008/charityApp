@@ -13,15 +13,16 @@ function generateVolueerCreateRequest(num) {
     return volunteers;
 }
 
-function generateVolueerCreateRequest(num) {
+function generateOrganizerCreateRequest(num) {
     var organizers = [];
     for (var i = 0; i< num; i++) {
         organizers.push(dataGenerator.getRandomOrganizerAndProfile())
         var postRequest = url + "create_user_organizer post " + "'" + JSON.stringify(volunteers[i]) + "'";
         console.log(postRequest);
     }
-    return volunteers;
+    return organizers;
 }
 
 generateVolueerCreateRequest(5);
+generateOrganizerCreateRequest(5);
 
