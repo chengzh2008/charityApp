@@ -42,7 +42,6 @@ function getRandomUser() {
         basic: {
             email: chance.string(3) + '@' + chance.string(3) + '.com',
             password: chance.string(5)
-
         },
         role: types[chance.natural({min: 0, max: types.length - 1})]
     }
@@ -206,5 +205,4 @@ console.log('generating ...', JSON.stringify(volunteerA));
     //            done();
     //        });
     //});
-
 });
