@@ -140,7 +140,9 @@ describe('volunteers api end points', function () {
                 expect(res.body).to.have.property('token')
                 var returnInfo = res.body;
                 delete returnInfo.profileInfo._id;
-                delete returnInfo.profileInfo.__v;
+                delete returnInfo.profileInfo.__v
+                console.log('testing...', returnInfo.token);
+                console.log('testing...more', returnInfo.profileInfo);
 
                 expect(returnInfo.profileInfo).to.deep.eql(userObjectA.profileInfo);
                 done();
