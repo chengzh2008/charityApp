@@ -119,9 +119,10 @@ describe('volunteers api end points', function () {
         userObjectD = getRandomVolunteerAndProfile(),
         userObjectE = getRandomVolunteerAndProfile();
 
-    userObjectA.credential.basic.email = '123@abc.com';
-    userObjectA.profileInfo.email = '123@abc.com';
-    userObjectA.credential.basic.password = '12345';
+    userObjectA.credential.basic.email = '456@abc.com';
+    userObjectA.profileInfo.email = '456@abc.com';
+    userObjectA.credential.basic.password = '12345'
+    userObjectA.credential.role = 'volunteer';
 
 
     after(function (done) {
