@@ -137,7 +137,6 @@ describe('create volunteer user profile and login', function () {
     });
 
     it('should create a volunteer user and return a token', function (done) {
-        console.log(volunteerA);
 
         chai.request(serverUrl)
             .post('/create_user_volunteer')
@@ -201,7 +200,6 @@ describe('create organizer user profile and login', function () {
     });
 
     it('should create a organizer user and return a token', function (done) {
-        console.log(organizerA);
         chai.request(serverUrl)
             .post('/create_user_organizer')
             .send(organizerA)
@@ -285,7 +283,6 @@ describe('create event by organizer user', function () {
 
 
     it('should create an event with this organizer', function (done) {
-        console.log(eventA);
         chai.request(serverUrl)
             .post('/events')
             .set('token', token)
