@@ -13,6 +13,7 @@ var mongoose = require('mongoose'),
         type: String,
         website: String,
         createdSince: {type: Date, default: Date.now},
+        logo: String,
         events: [String]
     });
 
