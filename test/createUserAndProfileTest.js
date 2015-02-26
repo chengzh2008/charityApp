@@ -16,7 +16,7 @@ function getRandomOrganizerObject() {
 
     var typeOfOrganizer = ['animal', 'education', 'Christian', 'homelessness'];
     return {
-        email: chance.string(10) + '@' + chance.string(5) + '.com',
+        email: chance.string(5) + '@' + chance.string(3) + '.com',
         orgName: chance.string(15),
         firstname: chance.string(15),
         lastname: chance.string(15),
@@ -40,21 +40,53 @@ function getRandomUser() {
     var types = ['volunteer', 'organizer'];
     return {
         basic: {
-            email: chance.string(10) + '@' + chance.string(5) + '.com',
-            password: chance.string(30)
+            email: chance.string(3) + '@' + chance.string(3) + '.com',
+            password: chance.string(5)
         },
         role: types[chance.natural({min: 0, max: types.length - 1})]
     }
 }
 
-function getCreatedUserAndProfile() {
+function getRandomVolunteerAndProfile() {
     var user = getRandomUser();
-    var profile = getRandomOrganizerObject();
-    profile.email = user.email;
+    var profileInfo = getRandomVolunteerObject();
+    user.role = 'volunteer';
+    profileInfo.email = user.basic.email;
     return {
         credential: user,
-        profileInfo: profile
+        profileInfo: profileInfo
     }
+
+}
+
+
+function getRandomOrganizerAndProfile() {
+    var user = getRandomUser();
+    var profileInfo = getRandomOrganizerObject();
+    user.role = 'organizer';
+    profileInfo.email = user.email;
+    return {
+        credential: user,
+        profileInfo: profileInfo
+    }
+
+}
+
+function getRandomVolunteerObject() {
+    var typeOfCauses = ['animal', 'education', 'Christian', 'homelessness'];
+    return {
+        email: chance.string(4) + '@' + chance.string(3) + '.com',
+        name: {
+            firstname: chance.string(15),
+            lastname: chance.string(15)
+        },
+        age18: 'yes',
+        address: getRandomAddress(),
+        aboutme: chance.paragraph({sentences: 2}),
+        causes: [typeOfCauses[chance.natural({min: 0, max: typeOfCauses.length - 1})]], // type of causes        skills: [chance.string(15)],
+        skills: [chance.string(15)],
+        events: [chance.string(15)]
+    };
 }
 
 function getRandomEvent() {
@@ -90,31 +122,15 @@ function getRandomEvent() {
     }
 }
 
-describe('organizers api end points', function () {
+describe('volunteers api end points', function () {
     var token,
-    userA = getCreatedUserAndProfile(),
-    userB = getCreatedUserAndProfile(),
-    userC = getCreatedUserAndProfile(),
-    userD = getCreatedUserAndProfile(),
-    userE = getCreatedUserAndProfile();
+        volunteerA = getRandomVolunteerAndProfile();
+    volunteerA.credential.basic.email = "abc@abc.com";
+    volunteerA.profileInfo.email =  "abc@abc.com";
+    volunteerA.credential.basic.password = '12345';
 
-
-
-    userA.email = 'bill@example.com';
-    userB.email = 'bill@example.com';
-    userC.email = 'cathy@example.com';
-    userD.email = 'dana@example.com';
-    userE.email = 'ellen@example.com';
-
-    before(function (done) {
-        chai.request(serverUrl)
-            .post('/create_user')
-            .send(userA)
-            .end(function (err, res) {
-                token = res.body.token;
-                done();
-            });
-    });
+console.log('generating ...', JSON.stringify(volunteerA));
+    var token;
 
 
     after(function (done) {
@@ -123,269 +139,70 @@ describe('organizers api end points', function () {
         });
     });
 
-    it('should create a user and return a token', function (done) {
+    it('should create a volunteer user and return a token', function (done) {
+        console.log(JSON.stringify(volunteerA));
         chai.request(serverUrl)
-            .post('/create_user')
-            .send(userB)
+            .post('/create_user_volunteer')
+            .send(volunteerA)
+            .end(function (err, res) {
+                expect(err).to.eql(null);
+                expect(res.body).to.have.property('token')
+                var returnInfo = res.body;
+                delete returnInfo.profileInfo._id;
+                delete returnInfo.profileInfo.__v;
+                token = returnInfo.token;
+                expect(returnInfo.profileInfo).to.deep.eql(volunteerA.profileInfo);
+                done();
+            })
+    });
+
+
+    it('should login as the volunteer user and return a token', function (done) {
+        //console.log(JSON.stringify(userObjectA));
+        chai.request(serverUrl)
+            .get('/sign_in')
+            .auth(volunteerA.credential.basic.email, volunteerA.credential.basic.password)
+            .send()
             .end(function (err, res) {
                 expect(err).to.eql(null);
                 expect(res.body).to.have.property('token');
+                var returnInfo = res.body;
+                delete returnInfo.profileInfo._id;
+                delete returnInfo.profileInfo.__v;
+                console.log('testing...', returnInfo.token);
+                console.log('testing...more', returnInfo.profileInfo);
+                expect(returnInfo.profileInfo).to.deep.eql(volunteerA.profileInfo);
                 done();
             })
-    })
+    });
 
-    it('should respond to a post request', function (done) {
-        organizerA.email = userA.email;
+    it('should get a volunter user profile with token', function (done) {
+        console.log(JSON.stringify(volunteerA));
         chai.request(serverUrl)
-            .post('/organizers')
-            .send(organizerA)
-            .set('token', token)
+            .get('/volunteer/' + volunteerA.credential.basic.email)
+            .send({token: token})
             .end(function (err, res) {
                 expect(err).to.eql(null);
-                var returnedOrganizer = res.body;
-                delete returnedOrganizer._id;
-                delete returnedOrganizer.__v;
-                expect(returnedOrganizer).to.deep.eql(organizerA);
-                done();
-            });
-    });
-
-    it('should respond to a get request', function (done) {
-        organizerA.email = userA.email;
-        chai.request(serverUrl)
-            .get('/organizers/' + organizerA.email)
-            .send()
-            .set('token', token)
-            .end(function (err, res) {
-                expect(err).to.eql(null);
-                var returnedorganizer = res.body;
-                delete returnedorganizer._id;
-                delete returnedorganizer.__v;
-                expect(returnedorganizer).to.eql(organizerA);
-                done();
-            });
-    });
-
-    it('should not respond to a get request', function (done) {
-        chai.request(serverUrl)
-            .get('/organizers/' + organizerA.email)
-            .send()
-            .end(function (err, res) {
-                expect(err).to.eql(null);
-                expect(res.body.msg).to.eql("could not authenticate");
-                done();
-            });
-    });
-
-    describe('delete test without and with token', function () {
-        var id;
-        organizerC.email = organizerA.email;
-        before(function (done) {
-            chai.request(serverUrl)
-                .post('/organizers')
-                .send(organizerC)
-                .set('token', token)
-                .end(function (err, res) {
-                    done();
-                })
-        });
-
-        it('should not respond to a delete request without token', function (done) {
-            chai.request(serverUrl)
-                .delete('/organizers/' + organizerA.email)
-                .send()
-                .end(function (err, res) {
-                    expect(err).to.eql(null);
-                    expect(res.body.msg).to.eql("could not authenticate");
-                    done();
-                });
-        });
-
-        it('should get to the organizerA', function (done) {
-            organizerC.email = organizerA.email;
-            chai.request(serverUrl)
-                .get('/organizers/' + organizerA.email)
-                .send()
-                .set('token', token)
-                .end(function (err, res) {
-                    expect(err).to.eql(null);
-                    var returnedorganizer = res.body;
-                    delete returnedorganizer._id;
-                    delete returnedorganizer.__v;
-                    expect(returnedorganizer).to.eql(organizerC);
-                    done();
-                });
-        });
-
-
-        it('should respond to a delete request with token', function (done) {
-            chai.request(serverUrl)
-                .delete('/organizers/' + organizerA.email)
-                .send()
-                .set('token', token)
-                .end(function (err, res) {
-                    expect(err).to.eql(null);
-                    expect(res.body.msg).to.eql("Your doc has been removed: ID " + id);
-                    done();
-                });
-        });
-    });
-});
-
-describe('events api end points', function () {
-    var token,
-        eventA = getRandomEvent(),
-        eventB = getRandomEvent(),
-        eventC = getRandomEvent(),
-        eventD = getRandomEvent(),
-        eventE = getRandomEvent(),
-
-        userA = getRandomUser(),
-        userB = getRandomUser();
-
-
-    before(function (done) {
-        chai.request(serverUrl)
-            .post('/create_user')
-            .send(userA)
-            .end(function (err, res) {
-                token = res.body.token;
-                done();
-            });
-    });
-
-
-    after(function (done) {
-        mongoose.connection.db.dropDatabase(function () {
-            done();
-        });
-    });
-
-    it('should create a user and return a token', function (done) {
-        chai.request(serverUrl)
-            .post('/create_user')
-            .send(userB)
-            .end(function (err, res) {
-                expect(err).to.eql(null);
-                expect(res.body).to.have.property('token');
+                var returnInfo = res.body;
+                delete returnInfo._id;
+                delete returnInfo.__v;
+                expect(returnInfo).to.deep.eql(volunteerA.profileInfo);
                 done();
             })
-    })
-
-    it('should respond to a post request', function (done) {
-        chai.request(serverUrl)
-            .post('/events')
-            .send(eventA)
-            .set('token', token)
-            .end(function (err, res) {
-                expect(err).to.eql(null);
-                var returnedOrganizer = res.body;
-                delete returnedOrganizer._id;
-                delete returnedOrganizer.__v;
-                expect(returnedOrganizer).to.deep.eql(eventA);
-                done();
-            });
     });
 
-    it('should respond to a get request', function (done) {
-        chai.request(serverUrl)
-            .get('/events')
-            .send()
-            .set('token', token)
-            .end(function (err, res) {
-                expect(err).to.eql(null);
-                var returnedorganizer = res.body[0];
-                delete returnedorganizer._id;
-                delete returnedorganizer.__v;
-                expect(returnedorganizer).to.eql(eventA);
-                done();
-            });
-    });
-
-    it('should not respond to a get request', function (done) {
-        chai.request(serverUrl)
-            .get('/events')
-            .send()
-            .end(function (err, res) {
-                expect(err).to.eql(null);
-                expect(res.body.msg).to.eql("could not authenticate");
-                done();
-            });
-    });
-
-    describe('delete test without and with token', function () {
-        var id;
-        before(function (done) {
-            chai.request(serverUrl)
-                .post('/events')
-                .send(eventC)
-                .set('token', token)
-                .end(function (err, res) {
-                    id = res.body._id;
-                    done();
-                })
-        });
-
-        it('should not respond to a delete request without token', function (done) {
-            chai.request(serverUrl)
-                .delete('/events/' + id)
-                .send()
-                .end(function (err, res) {
-                    expect(err).to.eql(null);
-                    expect(res.body.msg).to.eql("could not authenticate");
-                    done();
-                });
-        });
-
-        it('should get to the eventA', function (done) {
-            chai.request(serverUrl)
-                .get('/events')
-                .send()
-                .set('token', token)
-                .end(function (err, res) {
-                    expect(err).to.eql(null);
-                    var returnedEvent = res.body[1];
-                    delete returnedEvent._id;
-                    delete returnedEvent.__v;
-                    expect(returnedEvent).to.eql(eventC);
-                    done();
-                });
-        });
-
-        it('should get 2 events', function (done) {
-            chai.request(serverUrl)
-                .get('/events')
-                .send()
-                .set('token', token)
-                .end(function (err, res) {
-                    expect(err).to.eql(null);
-                    expect(res.body.length).to.eql(2);
-                    done();
-                });
-        });
-
-        it('should respond to a delete request with token', function (done) {
-            chai.request(serverUrl)
-                .delete('/events/' + id)
-                .send()
-                .set('token', token)
-                .end(function (err, res) {
-                    expect(err).to.eql(null);
-                    expect(res.body.msg).to.eql("Your doc has been removed: ID " + id);
-                    done();
-                });
-        });
-
-        it('should get 1 event after delete request', function (done) {
-            chai.request(serverUrl)
-                .get('/events')
-                .send()
-                .set('token', token)
-                .end(function (err, res) {
-                    expect(err).to.eql(null);
-                    expect(res.body.length).to.eql(1);
-                    done();
-                });
-        });
-    });
+    //it('should respond to a get request', function (done) {
+    //    chai.request(serverUrl)
+    //        .get('/organizers')
+    //        .send()
+    //        .set('token', token)
+    //        .end(function (err, res) {
+    //            expect(err).to.eql(null);
+    //            var returnedorganizer = res.body[0];
+    //            delete returnedorganizer._id;
+    //            delete returnedorganizer.__v;
+    //            expect(returnedorganizer).to.eql(organizerA);
+    //            done();
+    //        });
+    //});
 });

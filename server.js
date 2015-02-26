@@ -23,7 +23,7 @@ var express = require('express')
 module.exports = {
     startServer: function () {
         app.set('appSecret', process.env.SECRET || 'thisismyuniqueserversecret');
-        mongoose.connect(process.env.MONG_URI || 'mongodb://localhost/myApp_dev');
+        mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/myApp_dev');
         app.use(passport.initialize());
         passportStrategy(passport);
 

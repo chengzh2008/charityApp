@@ -13,55 +13,62 @@ module.exports = function (app, passport, appSecret) {
     app.use(logger());
 
     app.post('/create_user_volunteer', function (req, res) {
-        // credential info from request
-        var newUser = new User(req.body.credentialInfo);
-        newUser.basic.email = req.body.email;
-        newUser.basic.password = newUser.generateHashedPassword(req.body.password);
-        newUser.role = req.body.role;
+        var newUser = new User(req.body.credential);
+        User.findOne({'basic.email': newUser.basic.email}, function (err, result) {
+            if (err) {
+                return res.status(500).send({msg: 'can not create user'});
+            }
+            if (result) {
+                return res.status(500).send({msg: 'user exists'});
+            }
+            newUser.basic.password = newUser.generateHashedPassword(newUser.basic.password);
+            newUser.save(function (err, user) {
+                if (err) return res.status(500).send({msg: 'can not create user'});
+                user.generateToken(appSecret, function (err, token) {
+                    if (err) return res.status(500).send({msg: 'can not generate token'});
 
-        newUser.save(function (err, user) {
-            if (err) return res.status(500).send({msg: 'can not create user'});
-            user.generateToken(appSecret, function (err, token) {
-                if (err) return res.status(500).send({msg: 'can not generate token'});
-
-                // profileInfo from request
-                var newVolunteer = new Volunteer(req.body.profileInfo);
-                newVolunteer.save(function (err, volunteer) {
-                    if (err) //throw err;
-                        return res.status(500).send({'msg': 'could not save volunteer'});
-                    res.json({
-                        profileInfo: profileInfo,
-                        token: token
+                    var newVolunteer = new Volunteer(req.body.profileInfo);
+                    newVolunteer.save(function (err, volunteer) {
+                        if (err) //throw err;
+                            return res.status(500).send({'msg': 'could not save volunteer'});
+                        res.json({
+                            token: token,
+                            profileInfo: volunteer
+                        });
                     });
                 });
+
 
             });
         });
-
-
     });
 
     app.post('/create_user_organizer', function (req, res) {
-        var newUser = new User();
-        newUser.basic.email = req.body.email;
-        newUser.basic.password = newUser.generateHashedPassword(req.body.password);
-        newUser.role = req.body.role;
+        var newUser = new User(req.body.credential);
+        User.findOne({'basic.email': newUser.basic.email}, function (err, result) {
+            if (err) {
+                return res.status(500).send({msg: 'can not create user'});
+            }
+            if (result) {
+                return res.status(500).send({msg: 'user exists'});
+            }
+            newUser.basic.password = newUser.generateHashedPassword(newUser.basic.password);
+            newUser.save(function (err, user) {
+                if (err) return res.status(500).send({msg: 'can not create user'});
+                user.generateToken(appSecret, function (err, token) {
+                    if (err) return res.status(500).send({msg: 'can not generate token'});
 
-        newUser.save(function (err, user) {
-            if (err) return res.status(500).send({msg: 'can not create user'});
-            user.generateToken(appSecret, function (err, token) {
-                if (err) return res.status(500).send({msg: 'can not generate token'});
-
-                    // profileInfo from request
-                var newVolunteer = new Volunteer(req.body.profileInfo);
-                newVolunteer.save(function (err, volunteer) {
-                    if (err) //throw err;
-                        return res.status(500).send({'msg': 'could not save volunteer'});
-                    res.json({
-                        profileInfo: profileInfo,
-                        token: token
+                    var newOrganizer = new Organizer(req.body.profileInfo);
+                    newOrganizer.save(function (err, oranizer) {
+                        if (err) //throw err;
+                            return res.status(500).send({'msg': 'could not save volunteer'});
+                        res.json({
+                            token: token,
+                            profileInfo: oranizer
+                        });
                     });
                 });
+
             });
         });
     });
@@ -69,24 +76,24 @@ module.exports = function (app, passport, appSecret) {
     app.get('/sign_in', passport.authenticate('basic', {session: false}), function (req, res) {
         req.user.generateToken(appSecret, function (err, token) {
             if (err) return res.status(500).send({msg: 'could not generate token'});
-            var role = req.user.role;
-            if (role === 'volunteer') {
+            if (req.user.role === 'volunteer') {
                 getSignedUser(Volunteer, req, res, token);
             } else {
                 getSignedUser(Organizer, req, res, token);
             }
         });
     });
-};
+}
+
 
 function getSignedUser(UserType, req, res, token) {
-    UserType.findOne({email: req.user}, function (err, profileInfo) {
-        if (err || !profileInfo) {
-            return res.status(500).send({'msg': 'Could not find organizers'});
+    UserType.findOne({email: req.user.basic.email}, function (err, profileInfo) {
+        if (err) {
+            return res.status(500).send({msg: 'can not login user'});
         }
         res.json({
-            profileInfo: profileInfo,
-            token: token
+            token: token,
+            profileInfo: profileInfo
         });
     });
 }
