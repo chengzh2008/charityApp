@@ -5,126 +5,15 @@ require('../index');
 var chai = require('chai'),
     chaihttp = require('chai-http'),
     expect = chai.expect,
-    Chance = require('chance'),
-    chance = new Chance(),
     serverUrl = 'localhost:3000/api/v1',
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    testDataGenerator = require('../lib/testDataGenerator');
 
 chai.use(chaihttp);
 
-function getRandomOrganizerObject() {
-
-    var typeOfOrganizer = ['animal', 'education', 'Christian', 'homelessness'];
-    return {
-        email: chance.string(5) + '@' + chance.string(3) + '.com',
-        orgName: chance.string(15),
-        firstname: chance.string(15),
-        lastname: chance.string(15),
-        type: typeOfOrganizer[chance.natural({min: 0, max: typeOfOrganizer.length - 1})], // type of organization
-        mission: chance.paragraph({sentences: 3}),
-        address: getRandomAddress(),
-        city: chance.string(9),
-        phone: chance.phone(),
-        website: chance.url(),
-        createdSince: new Date().toJSON(),
-        events: [chance.string(15), chance.string(15)]
-    };
-}
-
-function getRandomAddress() {
-    return chance.address() + ' ' + chance.state() + ' ' + chance.zip();
-}
-
-
-function getRandomUser() {
-    var types = ['volunteer', 'organizer'];
-    return {
-        basic: {
-            email: chance.string(3) + '@' + chance.string(3) + '.com',
-            password: chance.string(5)
-        },
-        role: types[chance.natural({min: 0, max: types.length - 1})]
-    }
-}
-
-function getRandomVolunteerAndProfile() {
-    var user = getRandomUser();
-    var profileInfo = getRandomVolunteerObject();
-    user.role = 'volunteer';
-    profileInfo.email = user.basic.email;
-    return {
-        credential: user,
-        profileInfo: profileInfo
-    }
-
-}
-
-
-function getRandomOrganizerAndProfile() {
-    var user = getRandomUser();
-    var profileInfo = getRandomOrganizerObject();
-    user.role = 'organizer';
-    profileInfo.email = user.email;
-    return {
-        credential: user,
-        profileInfo: profileInfo
-    }
-
-}
-
-function getRandomVolunteerObject() {
-    var typeOfCauses = ['animal', 'education', 'Christian', 'homelessness'];
-    return {
-        email: chance.string(4) + '@' + chance.string(3) + '.com',
-        name: {
-            firstname: chance.string(15),
-            lastname: chance.string(15)
-        },
-        age18: 'yes',
-        address: getRandomAddress(),
-        aboutme: chance.paragraph({sentences: 2}),
-        causes: [typeOfCauses[chance.natural({min: 0, max: typeOfCauses.length - 1})]], // type of causes        skills: [chance.string(15)],
-        skills: [chance.string(15)],
-        events: [chance.string(15)]
-    };
-}
-
-function getRandomEvent() {
-    return {
-        eventId: chance.string(20),
-        organizerId: chance.string(15),
-        volunteerId: '',
-        title: chance.paragraph({sentences: 1}),
-        date: new Date().toJSON(),
-        time: new Date().toJSON(),
-        location: chance.string(10),
-        description: chance.paragraph({sentences: 2}),
-        volunteerJobs: [{
-            title: chance.string(),
-            number: chance.integer(),
-            skills: [chance.string(5)]
-        }, {
-            title: chance.string(),
-            number: chance.integer(),
-            skills: [chance.string(5)]
-        }],
-        messages: [{
-            username: chance.string(5),
-            body: chance.paragraph({sentences: 1}),
-            date: new Date().toJSON()
-        }, {
-            username: chance.string(5),
-            body: chance.paragraph({sentences: 1}),
-            date: new Date().toJSON()
-        }],
-        createdSince: new Date().toJSON(),
-        closed: chance.bool()
-    }
-}
-
 describe('create volunteer user profile and login', function () {
     var token,
-        volunteerA = getRandomVolunteerAndProfile();
+        volunteerA = testDataGenerator.getRandomVolunteerAndProfile();
     volunteerA.credential.basic.email = "abc@abc.com";
     volunteerA.profileInfo.email =  "abc@abc.com";
     volunteerA.credential.basic.password = '12345';
@@ -187,7 +76,7 @@ describe('create volunteer user profile and login', function () {
 
 describe('create organizer user profile and login', function () {
     var token,
-        organizerA = getRandomOrganizerAndProfile();
+        organizerA = testDataGenerator.getRandomOrganizerAndProfile();
     organizerA.credential.basic.email = "def@def.com";
     organizerA.profileInfo.email =  "def@def.com";
     organizerA.credential.basic.password = '12345';
@@ -249,14 +138,14 @@ describe('create organizer user profile and login', function () {
 
 describe('create event by organizer user', function () {
     var token,
-        organizerA = getRandomOrganizerAndProfile();
+        organizerA = testDataGenerator.getRandomOrganizerAndProfile();
     organizerA.credential.basic.email = "def@def.com";
     organizerA.profileInfo.email =  "def@def.com";
     organizerA.credential.basic.password = '12345';
 
-    var eventA = getRandomEvent();
+    var eventA = testDataGenerator.getRandomEvent();
     eventA.organizerId = organizerA.profileInfo.email;
-    var eventB = getRandomEvent();
+    var eventB = testDataGenerator.getRandomEvent();
     eventB.organizerId = organizerA.profileInfo.email;
 
     after(function (done) {
