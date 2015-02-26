@@ -129,9 +129,6 @@ describe('volunteers api end points', function () {
     volunteerA.profileInfo.email =  "abc@abc.com";
     volunteerA.credential.basic.password = '12345';
 
-console.log('generating ...', JSON.stringify(volunteerA));
-    var token;
-
 
     after(function (done) {
         mongoose.connection.db.dropDatabase(function () {
@@ -156,7 +153,6 @@ console.log('generating ...', JSON.stringify(volunteerA));
             })
     });
 
-
     it('should login as the volunteer user and return a token', function (done) {
         //console.log(JSON.stringify(userObjectA));
         chai.request(serverUrl)
@@ -170,7 +166,6 @@ console.log('generating ...', JSON.stringify(volunteerA));
                 delete returnInfo.profileInfo._id;
                 delete returnInfo.profileInfo.__v;
                 console.log('testing...', returnInfo.token);
-                console.log('testing...more', returnInfo.profileInfo);
                 expect(returnInfo.profileInfo).to.deep.eql(volunteerA.profileInfo);
                 done();
             })
@@ -190,19 +185,4 @@ console.log('generating ...', JSON.stringify(volunteerA));
                 done();
             })
     });
-
-    //it('should respond to a get request', function (done) {
-    //    chai.request(serverUrl)
-    //        .get('/organizers')
-    //        .send()
-    //        .set('token', token)
-    //        .end(function (err, res) {
-    //            expect(err).to.eql(null);
-    //            var returnedorganizer = res.body[0];
-    //            delete returnedorganizer._id;
-    //            delete returnedorganizer.__v;
-    //            expect(returnedorganizer).to.eql(organizerA);
-    //            done();
-    //        });
-    //});
 });
