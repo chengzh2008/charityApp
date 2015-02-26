@@ -16,7 +16,7 @@ function getRandomOrganizerObject() {
 
     var typeOfOrganizer = ['animal', 'education', 'Christian', 'homelessness'];
     return {
-        email: chance.string(10) + '@' + chance.string(5) + '.com',
+        email: chance.string(5) + '@' + chance.string(3) + '.com',
         orgName: chance.string(15),
         firstname: chance.string(15),
         lastname: chance.string(15),
@@ -40,7 +40,7 @@ function getRandomUser() {
     var types = ['volunteer', 'organizer'];
     return {
         basic: {
-            email: chance.string(4) + '@' + chance.string(3) + '.com',
+            email: chance.string(3) + '@' + chance.string(3) + '.com',
             password: chance.string(5)
 
         },
@@ -52,7 +52,7 @@ function getRandomVolunteerAndProfile() {
     var user = getRandomUser();
     var profileInfo = getRandomVolunteerObject();
     user.role = 'volunteer';
-    profileInfo.email = user.email;
+    profileInfo.email = user.basic.email;
     return {
         credential: user,
         profileInfo: profileInfo
@@ -125,15 +125,12 @@ function getRandomEvent() {
 
 describe('volunteers api end points', function () {
     var token,
+        volunteerA = getRandomVolunteerAndProfile();
+    volunteerA.credential.basic.email = "abc@abc.com";
+    volunteerA.profileInfo.email =  "abc@abc.com";
+    volunteerA.credential.basic.password = '12345';
 
-        volunteerA = getRandomVolunteerAndProfile(),
-        volunteerB = getRandomVolunteerAndProfile(),
-        volunteerC = getRandomVolunteerAndProfile(),
-        organizerA = getRandomVolunteerAndProfile(),
-        organizerB = getRandomVolunteerAndProfile(),
-        organizerC = getRandomVolunteerAndProfile();
-
-
+console.log('generating ...', JSON.stringify(volunteerA));
     var token;
 
 
@@ -154,8 +151,6 @@ describe('volunteers api end points', function () {
                 var returnInfo = res.body;
                 delete returnInfo.profileInfo._id;
                 delete returnInfo.profileInfo.__v;
-                console.log('testing...', returnInfo.token);
-                console.log('testing...more', returnInfo.profileInfo);
                 token = returnInfo.token;
                 expect(returnInfo.profileInfo).to.deep.eql(volunteerA.profileInfo);
                 done();
@@ -163,15 +158,18 @@ describe('volunteers api end points', function () {
     });
 
 
-    it('should create a volunteer user and return a token', function (done) {
+    it('should login as the volunteer user and return a token', function (done) {
         //console.log(JSON.stringify(userObjectA));
         chai.request(serverUrl)
-            .get('/sign_in/' + volunteerA.email)
+            .get('/sign_in')
+            .auth(volunteerA.credential.basic.email, volunteerA.credential.basic.password)
             .send()
             .end(function (err, res) {
                 expect(err).to.eql(null);
                 expect(res.body).to.have.property('token');
                 var returnInfo = res.body;
+                delete returnInfo.profileInfo._id;
+                delete returnInfo.profileInfo.__v;
                 console.log('testing...', returnInfo.token);
                 console.log('testing...more', returnInfo.profileInfo);
                 expect(returnInfo.profileInfo).to.deep.eql(volunteerA.profileInfo);
@@ -179,5 +177,34 @@ describe('volunteers api end points', function () {
             })
     });
 
+    it('should get a volunter user profile with token', function (done) {
+        console.log(JSON.stringify(volunteerA));
+        chai.request(serverUrl)
+            .get('/volunteer/' + volunteerA.credential.basic.email)
+            .send({token: token})
+            .end(function (err, res) {
+                expect(err).to.eql(null);
+                var returnInfo = res.body;
+                delete returnInfo._id;
+                delete returnInfo.__v;
+                expect(returnInfo).to.deep.eql(volunteerA.profileInfo);
+                done();
+            })
+    });
+
+    //it('should respond to a get request', function (done) {
+    //    chai.request(serverUrl)
+    //        .get('/organizers')
+    //        .send()
+    //        .set('token', token)
+    //        .end(function (err, res) {
+    //            expect(err).to.eql(null);
+    //            var returnedorganizer = res.body[0];
+    //            delete returnedorganizer._id;
+    //            delete returnedorganizer.__v;
+    //            expect(returnedorganizer).to.eql(organizerA);
+    //            done();
+    //        });
+    //});
 
 });
