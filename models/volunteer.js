@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 
 var volunteerSchema = new mongoose.Schema({
 
-	email :String, // same as userid ???
+	email : String, // same as userid ???
 	name:{	// if same as userid no need of name since it iwll come from username
 		firstname:String,
 		lastname:String

@@ -40,8 +40,8 @@ function getRandomUser() {
     var types = ['volunteer', 'organizer'];
     return {
         basic: {
-            email: chance.string(10) + '@' + chance.string(5) + '.com',
-            password: chance.string(30),
+            email: chance.string(4) + '@' + chance.string(3) + '.com',
+            password: chance.string(5)
 
         },
         role: types[chance.natural({min: 0, max: types.length - 1})]
@@ -51,6 +51,20 @@ function getRandomUser() {
 function getRandomVolunteerAndProfile() {
     var user = getRandomUser();
     var profileInfo = getRandomVolunteerObject();
+    user.role = 'volunteer';
+    profileInfo.email = user.email;
+    return {
+        credential: user,
+        profileInfo: profileInfo
+    }
+
+}
+
+
+function getRandomOrganizerAndProfile() {
+    var user = getRandomUser();
+    var profileInfo = getRandomOrganizerObject();
+    user.role = 'organizer';
     profileInfo.email = user.email;
     return {
         credential: user,
@@ -62,7 +76,7 @@ function getRandomVolunteerAndProfile() {
 function getRandomVolunteerObject() {
     var typeOfCauses = ['animal', 'education', 'Christian', 'homelessness'];
     return {
-        email: chance.string(10) + '@' + chance.string(5) + '.com',
+        email: chance.string(4) + '@' + chance.string(3) + '.com',
         name: {
             firstname: chance.string(15),
             lastname: chance.string(15)
@@ -112,17 +126,15 @@ function getRandomEvent() {
 describe('volunteers api end points', function () {
     var token,
 
+        volunteerA = getRandomVolunteerAndProfile(),
+        volunteerB = getRandomVolunteerAndProfile(),
+        volunteerC = getRandomVolunteerAndProfile(),
+        organizerA = getRandomVolunteerAndProfile(),
+        organizerB = getRandomVolunteerAndProfile(),
+        organizerC = getRandomVolunteerAndProfile();
 
-        userObjectA = getRandomVolunteerAndProfile(),
-        userObjectB = getRandomVolunteerAndProfile(),
-        userObjectC = getRandomVolunteerAndProfile(),
-        userObjectD = getRandomVolunteerAndProfile(),
-        userObjectE = getRandomVolunteerAndProfile();
 
-    userObjectA.credential.basic.email = '456@abc.com';
-    userObjectA.profileInfo.email = '456@abc.com';
-    userObjectA.credential.basic.password = '12345'
-    userObjectA.credential.role = 'volunteer';
+    var token;
 
 
     after(function (done) {
@@ -132,20 +144,37 @@ describe('volunteers api end points', function () {
     });
 
     it('should create a volunteer user and return a token', function (done) {
-        console.log(JSON.stringify(userObjectA));
+        console.log(JSON.stringify(volunteerA));
         chai.request(serverUrl)
             .post('/create_user_volunteer')
-            .send(userObjectA)
+            .send(volunteerA)
             .end(function (err, res) {
                 expect(err).to.eql(null);
                 expect(res.body).to.have.property('token')
                 var returnInfo = res.body;
                 delete returnInfo.profileInfo._id;
-                delete returnInfo.profileInfo.__v
+                delete returnInfo.profileInfo.__v;
                 console.log('testing...', returnInfo.token);
                 console.log('testing...more', returnInfo.profileInfo);
+                token = returnInfo.token;
+                expect(returnInfo.profileInfo).to.deep.eql(volunteerA.profileInfo);
+                done();
+            })
+    });
 
-                expect(returnInfo.profileInfo).to.deep.eql(userObjectA.profileInfo);
+
+    it('should create a volunteer user and return a token', function (done) {
+        //console.log(JSON.stringify(userObjectA));
+        chai.request(serverUrl)
+            .get('/sign_in/' + volunteerA.email)
+            .send()
+            .end(function (err, res) {
+                expect(err).to.eql(null);
+                expect(res.body).to.have.property('token');
+                var returnInfo = res.body;
+                console.log('testing...', returnInfo.token);
+                console.log('testing...more', returnInfo.profileInfo);
+                expect(returnInfo.profileInfo).to.deep.eql(volunteerA.profileInfo);
                 done();
             })
     });
