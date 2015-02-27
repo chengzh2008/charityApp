@@ -197,6 +197,7 @@ describe('create event by organizer user', function () {
                 var returnInfo = res.body;
                 delete returnInfo._id;
                 delete returnInfo.__v;
+                console.log(returnInfo);
                 expect(returnInfo).to.deep.eql(eventB);
                 done();
             })

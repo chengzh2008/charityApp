@@ -22,8 +22,9 @@ userSchema.methods.validPassword = function (password) {
     return bcript.compareSync(password, this.basic.password);
 };
 
-userSchema.methods.generateToken = function(appSecret, callback) {
+userSchema.methods.generateToken = function (appSecret, callback) {
     eat.encode({id: this.basic.email, timestamp: new Date()}, appSecret, callback);
 };
 
 module.exports = mongoose.model('User', userSchema);
+
