@@ -10,12 +10,12 @@ var Chance = require('chance');
 var chance = new Chance();
 var expect = chai.expect;
 chai.use(chaihttp);
-//----------------------------------------------------------------------
+
 function getRandomVolunteerObject() {
     var typeOfCauses = ['animal', 'education', 'Christian', 'homelessness'];
     return {
         email: chance.string(10) + '@' + chance.string(5) + '.com',
-        role :'volunteer',
+        role: 'volunteer',
         name: {
             firstname: chance.string(15),
             lastname: chance.string(15)
@@ -26,6 +26,7 @@ function getRandomVolunteerObject() {
         causes: [typeOfCauses[chance.natural({min: 0, max: typeOfCauses.length - 1})]], // type of causes        skills: [chance.string(15)],
         skills: [chance.string(15)],
         events: [chance.string(15)]
+    }
 }
 
 
@@ -38,7 +39,6 @@ function getRandomUser() {
     };
 }
 
-//------------------------------------------------------------------------------
 
 describe('POST - Charity App, Volunteer route testing', function () {
     after(function (done) {
@@ -71,7 +71,7 @@ describe('POST - Charity App, Volunteer route testing', function () {
     before(function (done) {
         chai.request(serverURL)
             .post('/create_user')
-            .send(userA)  
+            .send(userA)
             .end(function (err, res) {
                 token = res.body.token;
                 done();
@@ -217,4 +217,3 @@ describe('POST - Charity App, Volunteer route testing', function () {
     });
 
 });
-

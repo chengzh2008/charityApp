@@ -23,7 +23,7 @@ module.exports = function (router, appSecret) {
                 return res.status(500).send({'msg': 'Could not save a blog'});
             }
 
-            res.json(data._id);
+            res.json(data.email);
         });
     });
 

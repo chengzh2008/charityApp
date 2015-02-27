@@ -47,7 +47,7 @@ module.exports = function (router, appSecret) {
         if (req.user.basic.email !== req.params.id) {
             return res.status(500).send({'msg': 'unauthorized request'});
         }
-        Event.remove({_id: req.params.id}, function (err, result) {
+        Event.remove({organizerId: req.params.id}, function (err, result) {
             if (err) {
                 return res.status(500).send({'msg': 'Could not find events'});
             }

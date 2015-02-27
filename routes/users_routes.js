@@ -7,7 +7,6 @@ var bodyparser = require('body-parser'),
     logger = require('../lib/logger');
 
 
-
 module.exports = function (app, passport, appSecret) {
     app.use(bodyparser.json());
     // middleware to log the request, should be placed before those request.
@@ -23,7 +22,9 @@ module.exports = function (app, passport, appSecret) {
 
     app.get('/sign_in', passport.authenticate('basic', {session: false}), function (req, res) {
         req.user.generateToken(appSecret, function (err, token) {
-            if (err) return res.status(500).send({msg: 'could not generate token'});
+            if (err) {
+                return res.status(500).send({msg: 'could not generate token'});
+            }
             if (req.user.role === 'volunteer') {
                 getSignedUser(Volunteer, req, res, token);
             } else {
@@ -31,7 +32,7 @@ module.exports = function (app, passport, appSecret) {
             }
         });
     });
-}
+};
 
 
 function getSignedUser(UserType, req, res, token) {
@@ -59,14 +60,19 @@ function processUser(UserType, req, res, appSecret) {
         }
         newUser.basic.password = newUser.generateHashedPassword(newUser.basic.password);
         newUser.save(function (err, user) {
-            if (err) return res.status(500).send({msg: 'can not create user'});
+            if (err) {
+                return res.status(500).send({msg: 'can not create user'});
+            }
             user.generateToken(appSecret, function (err, token) {
-                if (err) return res.status(500).send({msg: 'can not generate token'});
+                if (err) {
+                    return res.status(500).send({msg: 'can not generate token'});
+                }
 
                 var newUserProfile = new UserType(req.body.profileInfo);
                 newUserProfile.save(function (err, profile) {
-                    if (err) //throw err;
+                    if (err) {
                         return res.status(500).send({'msg': 'could not save ' + user.role});
+                    }
                     res.json({
                         token: token,
                         profileInfo: profile
