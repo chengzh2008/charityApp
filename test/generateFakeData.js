@@ -23,6 +23,6 @@ function generateOrganizerCreateRequest(num) {
     return organizers;
 }
 
-generateVolueerCreateRequest(5);
-generateOrganizerCreateRequest(5);
+generateVolueerCreateRequest(2);
+generateOrganizerCreateRequest(3);
 
