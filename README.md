@@ -1,3 +1,6 @@
+### Status
+[![Build Status](https://travis-ci.org/chengzh2008/charityApp.svg?branch=heroku)](https://travis-ci.org/simkimsia/UtilityBehaviors)
+
 # charityApp
 Created by Melissa, Zhihong (back-end team) and Annemarie, David and Clint (iOS team). Great collaboration!
 
