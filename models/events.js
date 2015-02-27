@@ -13,7 +13,6 @@ var mongoose = require('mongoose'),
         volunteerJobs: [{
             _id: false,
             title: String,
-            number: Number,
             skills: [String]
         }],
         messages: [{

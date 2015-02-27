@@ -47,7 +47,9 @@ function getSignedUser(UserType, req, res, token) {
 }
 
 function processUser(UserType, req, res, appSecret) {
+    console.log('the info from request body....', req.body);
     var newUser = new User(req.body.credential);
+
     User.findOne({'basic.email': newUser.basic.email}, function (err, result) {
         if (err) {
             return res.status(500).send({msg: 'can not create user'});
