@@ -172,6 +172,7 @@ describe('create event by organizer user', function () {
 
 
     it('should create an event with this organizer', function (done) {
+        console.log(eventA);
         chai.request(serverUrl)
             .post('/events')
             .set('token', token)
