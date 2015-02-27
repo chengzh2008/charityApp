@@ -1,7 +1,7 @@
 'use strict';
-var Volunteer = require('../models/volunteer.js');
-var bodyparser = require('body-parser');
-var eat_auth = require('../lib/eat_auth');
+var Volunteer = require('../models/volunteer.js'),
+    bodyparser = require('body-parser'),
+    eat_auth = require('../lib/eat_auth');
 
 module.exports = function (vol_router, appSecret) {
 
@@ -9,14 +9,15 @@ module.exports = function (vol_router, appSecret) {
 
     // PUT - replace existing object
     vol_router.put('/volunteers/:id', eat_auth(appSecret), function (req, res) {
-        var updateVolunteer = req.body;
-        var query = {'email': req.params.id};
+        var updateVolunteer = req.body,
+            query = {'email': req.params.id};
         if (req.user.basic.email !== req.params.id) {
             return res.status(500).send({'msg': 'unauthorized request'});
         } else {
             Volunteer.update(query, updateVolunteer, function (err) {
-                if (err)
+                if (err) {
                     return res.status(500).send({'msg': 'could not save volunteer'});
+                }
                 res.json(req.body);
             });
         }
@@ -29,8 +30,9 @@ module.exports = function (vol_router, appSecret) {
             return res.status(500).send({'msg': 'unauthorized request'});
         }
         Volunteer.findOne(query, function (err, data) {
-            if (err)
+            if (err) {
                 return res.status(500).send({'msg': 'could not retrieve volunteer'});
+            }
             res.json(data);
         });
     });
@@ -42,15 +44,16 @@ module.exports = function (vol_router, appSecret) {
             return res.status(500).send({'msg': 'unauthorized request'});
         }
         Volunteer.remove(query, function (err) {
-            if (err) return res.status(500).send({'msg': 'could not delete volunteer'});
-            else {
+            if (err) {
+                return res.status(500).send({'msg': 'could not delete volunteer'});
+            } else {
                 Volunteer.find(query, {'email': req.params.id, _id: 0}, function (err, data) {
-                    if (err) return res.status(500).send({'msg': 'could not retrieve volunteer'});
+                    if (err) {
+                        return res.status(500).send({'msg': 'could not retrieve volunteer'});
+                    }
                     res.json(data);
                 });
             }
         });
     });
-
-
 };

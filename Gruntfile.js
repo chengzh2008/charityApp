@@ -11,8 +11,7 @@ module.exports = function (grunt) {
     grunt.initConfig({
         watch: {
             scripts: {
-                files: ['Gruntfile.js', 'routes/**/*.js', 'models',
-                    'test/createUserAndProfileTest.js.js', '*.js', '.jscsrc', '.jshintrc'],
+                files: ['Gruntfile.js', 'routes/**/*.js', 'models', 'test/**/*.js', '*.js', '.jscsrc', '.jshintrc'],
                 tasks: ['default'],
                 options: {
                     spawn: true
@@ -24,7 +23,7 @@ module.exports = function (grunt) {
                 options: {
                     jshintrc: '.jshintrc'
                 },
-                src: ['Gruntfile.js', 'routes/**/*.js', 'models/**/*.js', 'test/createUserAndProfileTest.js.js', '*.js']
+                src: ['Gruntfile.js', 'routes/**/*.js', 'models/**/*.js', 'test/**/*.js', '*.js']
             }
         },
         jscs: {
@@ -33,13 +32,13 @@ module.exports = function (grunt) {
                     config: ".jscsrc"
                 },
                 files: {
-                    src: []
+                    src: ['Gruntfile.js', 'routes/**/*.js', 'models/**/*.js', 'test/**/*.js', '*.js']
                 }
             }
         },
         simplemocha: {
             all: {
-                src: ['test/createUserAndProfileTest.js']
+                src: ['test/**/*.js']
             }
         }
     });
