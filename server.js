@@ -1,24 +1,21 @@
 'use strict';
 
-var express = require('express')
-    , mongoose = require('mongoose')
-    , path = require('path')
-
-    , oganizerRoutes = require('./routes/organizer_routes')
-    , userRoutes = require('./routes/users_routes')
-    , eventRoutes = require('./routes/event_routes')
-    , volunteerRoutes = require('./routes/volunteer_routes')
-    , imageRoutes = require('./routes/image_routes')
-
-    , app = express()
-    , organizerRouter = express.Router()
-    , userRouter = express.Router()
-    , volunteerRouter = express.Router()
-    , eventRouter = express.Router()
-    , imageRouter = express.Router()
-
-    , passport = require('passport')
-    , passportStrategy = require('./lib/passport_strat')
+var express = require('express'),
+    mongoose = require('mongoose'),
+    path = require('path'),
+    oganizerRoutes = require('./routes/organizer_routes'),
+    userRoutes = require('./routes/users_routes'),
+    eventRoutes = require('./routes/event_routes'),
+    volunteerRoutes = require('./routes/volunteer_routes'),
+    imageRoutes = require('./routes/image_routes'),
+    app = express(),
+    organizerRouter = express.Router(),
+    userRouter = express.Router(),
+    volunteerRouter = express.Router(),
+    eventRouter = express.Router(),
+    imageRouter = express.Router(),
+    passport = require('passport'),
+    passportStrategy = require('./lib/passport_strat');
 
 module.exports = {
     startServer: function () {
