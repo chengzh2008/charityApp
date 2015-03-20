@@ -1,0 +1,24 @@
+<section data-ng-controller="organizerController" data-ng-init="getByUserId()">
+    <h1>Welcome onboard: {{$rootScope.currentUser.profileInfo.username}}</h1>
+
+    <h2>This the profile:</h2>
+
+    <ul>
+        <li><label>Email: </label> {{currentUser.profileInfo.email}}</li>
+        <li><label>Type: </label> {{currentUser.profileInfo.role}}</li>
+        <li><label>Name: </label> {{currentUser.profileInfo.orgName}}</li>
+        <li><label>Contact firstname: </label> {{currentUser.profileInfo.firstname}}</li>
+        <li><label>Contact lastname: </label> {{currentUser.profileInfo.lastname}}</li>
+        <li><label>Mission: </label> {{currentUser.profileInfo.mission}}</li>
+        <li><label>Address: </label> {{currentUser.profileInfo.address}}</li>
+        <li><label>City: </label> {{currentUser.profileInfo.city}}</li>
+        <li><label>Phone: </label> {{currentUser.profileInfo.phone}}</li>
+        <li><label>Website: </label> {{currentUser.profileInfo.website}}</li>
+        <li><label>Joined since: </label> {{currentUser.profileInfo.createdSince}}</li>
+    </ul>
+    <button data-ng-click="toggleEditProfile()" id="edittingProfile">Edit Profile</button>
+    <div data-editprofile-directive></div>
+
+
+</section>
+

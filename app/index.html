@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Hello From Html</title>
+</head>
+<body data-ng-app="helpOut">
+  <a data-ng-if="loggedIn()" data-ng-href="/#/signin" data-ng-click="logOut()">Log Out</a>
+  <main data-ng-view></main>
+  <script src="bundle.js"></script>
+</body>
+</html>

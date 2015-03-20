@@ -76,6 +76,7 @@ describe('create volunteer user profile and login', function () {
 
 describe('create organizer user profile and login', function () {
     var token,
+        userId,
         organizerA = testDataGenerator.getRandomOrganizerAndProfile();
     organizerA.credential.basic.email = "def@def.com";
     organizerA.profileInfo.email =  "def@def.com";
@@ -99,6 +100,7 @@ describe('create organizer user profile and login', function () {
                 delete returnInfo.profileInfo._id;
                 delete returnInfo.profileInfo.__v;
                 token = returnInfo.token;
+                userId= returnInfo.userId;
                 expect(returnInfo.profileInfo).to.deep.eql(organizerA.profileInfo);
                 done();
             });
@@ -122,11 +124,13 @@ describe('create organizer user profile and login', function () {
 
     it('should get a organizer user profile with token', function (done) {
         chai.request(serverUrl)
-            .get('/organizers/' + organizerA.credential.basic.email)
+            .get('/organizers/' + userId)
             .send({token: token})
             .end(function (err, res) {
+                console.log('orgnizer email', organizerA.profileInfo.email, userId);
                 expect(err).to.eql(null);
                 var returnInfo = res.body;
+                console.log('return from the server', returnInfo.email);
                 delete returnInfo._id;
                 delete returnInfo.__v;
                 expect(returnInfo).to.deep.eql(organizerA.profileInfo);
@@ -174,7 +178,7 @@ describe('create event by organizer user', function () {
 
 
     it('should create an event with this organizer', function (done) {
-        console.log(eventA);
+        //console.log(eventA);
         chai.request(serverUrl)
             .post('/events')
             .set('token', token)
@@ -199,7 +203,7 @@ describe('create event by organizer user', function () {
                 var returnInfo = res.body;
                 delete returnInfo._id;
                 delete returnInfo.__v;
-                console.log(returnInfo);
+                //console.log(returnInfo);
                 expect(returnInfo).to.deep.eql(eventB);
                 done();
             });
