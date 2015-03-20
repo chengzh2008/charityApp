@@ -25,7 +25,7 @@ module.exports = function (app) {
                         return request(restUrl + '/organizers/' + userId, 'GET');
                     },
                     edit: function (userId, organizer) {
-                        return request(restUrl + '/organizers/' + userId, 'POST', organizer);
+                        return request(restUrl + '/organizers/' + userId, 'PUT', organizer);
                     }
                 }
             };

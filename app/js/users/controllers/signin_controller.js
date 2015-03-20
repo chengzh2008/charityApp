@@ -11,7 +11,6 @@ module.exports = function (app) {
                 .success(function (data) {
                     $cookies.token = data.token;
                     $rootScope.currentUser = {
-                        userId: data.userId,
                         profileInfo: data.profileInfo
                     };
                     $location.path('/organizer/' + data.userId);

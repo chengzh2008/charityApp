@@ -1,31 +1,27 @@
-<form name="editProfile" data-ng-if="currentUser.edittingProfile">
+<form name="editProfile">
     <div>
         <label for="currentUserEmail">Email: </label>
-        <input type="text" id="currentUserEmail" data-ng-model="currentUser.profileInfo.author"/>
+        <input type="text" id="currentUserEmail" disabled data-ng-model="currentUser.profileInfo.email"/>
     </div>
     <div>
         <label for="currentUserType">Type: </label>
         <input type="text" id="currentUserType" data-ng-model="currentUser.profileInfo.type"/>
     </div>
     <div>
-        <label for="currentUserEmail">Email: </label>
-        <input type="text" id="currentUserName" data-ng-model="currentUser.profileInfo.author"/>
-    </div>
-    <div>
-        <label for="currentUserType">Type: </label>
-        <input type="text" id="currentUserCon" data-ng-model="currentUser.profileInfo.type"/>
+        <label for="currentUserOrgName">Organization: </label>
+        <input type="text" id="currentUserOrgName" data-ng-model="currentUser.profileInfo.orgName"/>
     </div>
     <div>
         <label for="currentUserFirstname">Contact firstname: </label>
-        <input type="text" id="currentUserFirstname" data-ng-model="currentUser.profileInfo.author"/>
+        <input type="text" id="currentUserFirstname" data-ng-model="currentUser.profileInfo.firstname"/>
     </div>
     <div>
         <label for="currentUserLastname">Contact lastname: </label>
-        <input type="text" id="currentUserLastname" data-ng-model="currentUser.profileInfo.type"/>
+        <input type="text" id="currentUserLastname" data-ng-model="currentUser.profileInfo.lastname"/>
     </div>
     <div>
         <label for="currentUserMission">Mission: </label>
-        <textarea type="text" id="currentUserMission" data-ng-model="currentUser.profileInfo.email"></textarea>
+        <textarea type="text" id="currentUserMission" data-ng-model="currentUser.profileInfo.mission"></textarea>
     </div>
     <div>
         <label for="currentUserAddress">Address: </label>
@@ -43,7 +39,11 @@
         <label for="currentUserWebsite">Website: </label>
         <input type="text" id="currentUserWebsite" data-ng-model="currentUser.profileInfo.website"/>
     </div>
+    <div>
+        <label for="currentUserJoinedSince">Joined since: </label>
+        <input type="text" id="currentUserJoinedSince" disabled data-ng-model="currentUser.profileInfo.createdSince"/>
+    </div>
 
-    <button type="submit" data-ng-click="save(currentUser.profileInfo)">Save Profile</button>
+    <button type="submit" data-ng-click="edit(currentUser.profileInfo)">Save Profile</button>
 </form>
 

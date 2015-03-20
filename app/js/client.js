@@ -19,7 +19,7 @@ require('./organizer/controllers/organizer_controller')(helpOut);
 //directives
 //require('./directives/dummy_directive')(helpOut);
 //require('./directives/create_resource_directive')(helpOut);
-//require('./organizer/directives/create_note_directive_one')(helpOut);
+require('./organizer/directives/edit_profile_directive')(helpOut);
 
 helpOut.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
