@@ -3,6 +3,11 @@
 
     <h2>This the profile:</h2>
 
+    <button data-ng-click="toggleImageUpload()" id="imageUpload">Update Image</button>
+    <div data-image-upload-directive data-ng-if="imageUploading"></div>
+    <p data-ng-if="imageUploading"> testing...</p>
+
+    <img src="data:image/png;, + {{userImage.data}}" alt="picture"/>
     <button data-ng-click="toggleEditProfile()" id="edittingProfile">Edit Profile</button>
     <ul data-ng-if="!edittingProfile">
         <li><label>Email: </label> {{currentUser.profileInfo.email}}</li>

@@ -27,6 +27,11 @@ module.exports = function (app) {
                     edit: function (userId, organizer) {
                         return request(restUrl + '/organizers/' + userId, 'PUT', organizer);
                     }
+                },
+                Image: {
+                    getImageById: function (userId) {
+                        return request(restUrl + '/images/' + userId, 'GET');
+                    }
                 }
             };
         }]);

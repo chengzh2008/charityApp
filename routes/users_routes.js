@@ -25,7 +25,6 @@ module.exports = function (app, passport, appSecret) {
             if (err) {
                 return res.status(500).send({msg: 'could not generate token'});
             }
-            console.log('after generate token', token);
             if (req.user.role === 'volunteer') {
                 getSignedUser(Volunteer, req, res, token);
             } else {
@@ -42,6 +41,7 @@ function getSignedUser(UserType, req, res, token) {
             return res.status(500).send({msg: 'can not login user'});
         }
         console.log('after signin', profileInfo);
+        console.log('after signin', req.user._id);
         console.log('after signin token', token);
 
         res.json({
