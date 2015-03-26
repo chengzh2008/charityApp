@@ -1,0 +1,6 @@
+<section>
+         Upload image <input type="file" data-ng-file-select="onFileSelect($files)" accept="image/png, image/jpeg">
+    <span data-ng-if="uploadInProgress">Upload progress: {{ uploadProgress }}</span>
+    <img data-ng-src="uploadedImage" data-ng-if="uploadedImage">
+</section>
+
