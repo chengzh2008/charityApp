@@ -1,4 +1,6 @@
-# charityApp
+
+# charityApp [![Build Status](https://travis-ci.org/chengzh2008/charityApp.svg?branch=heroku)](https://travis-ci.org/chengzh2008/charityApp)
+
 Created by Melissa, Zhihong (back-end team) and Annemarie, David and Clint (iOS team). Great collaboration!
 
 ## A restful web service for iOS app:
