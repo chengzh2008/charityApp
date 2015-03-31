@@ -13,38 +13,40 @@
 
 </head>
 <body data-ng-app="helpOut">
-    <header class="logo">
-        <a href="index.html"><h1 class="title">HelpOut</h1></a>
-    </header>
-    <nav class="nav">
-        <ul>
-            <li><a href="browse.html">Browse</a></li>
-            <li><a href="/#/maps">Maps</a></li>
-            <li><a href="about.html">About</a></li>
-        </ul>
-    <a data-ng-if="!loggedIn()" data-ng-href="/#/signin">Sign In</a>
-    <a data-ng-if="loggedIn()" data-ng-click="logOut()">Log Out</a>
-    </nav>
+<header class="logo">
+    <a href="index.html"><h1 class="title">HelpOut</h1></a>
+</header>
+<nav class="nav">
+    <ul>
+        <li><a href="browse.html">Browse</a></li>
+        <li><a href="/#/maps">Maps</a></li>
+        <li><a href="/#/about">About</a></li>
+    </ul>
+    <div class="login">
+        <a data-ng-if="!loggedIn()" data-ng-href="/#/signin">Sign In</a>
+        <a data-ng-if="loggedIn()" data-ng-href="/#/" data-ng-click="logOut()">Log Out</a>
+    </div>
+</nav>
 
-    <main class="contain">
-        <section class="cf" data-ng-view>
-        </section>
-    </main>
-    <footer class="footer">
-        <div class="copyright">
-            <p>&copy;2015 HeloOut.com</p>
+<main class="contain">
+    <section data-ng-view>
+    </section>
+</main>
+<footer class="footer">
+    <div class="copyright">
+        <p>&copy;2015 HelpOut.com</p>
 
-            <p><a href="">Terms of use</a></p>
-        </div>
-        <div class="social">
-            <a href="http://www.facebook.com/chengzh2008"><img src="img/site/facebook.png"></a>
-            <a href="http://www.twitter.com/@chengzh2008"><img src="img/site/twitter.png"></a>
-            <a href="http://www.linkedin.com/in/zhihongcheng"><img src="img/site/li.png"></a>
-            <a href="mailto:chengzh2008@gmail.com"><img src="img/site/mail.png"></a>
+        <p><a href="">Terms of use</a></p>
+    </div>
+    <div class="social">
+        <a href="http://www.facebook.com/chengzh2008"><img src="img/site/facebook.png"></a>
+        <a href="http://www.twitter.com/@chengzh2008"><img src="img/site/twitter.png"></a>
+        <a href="http://www.linkedin.com/in/zhihongcheng"><img src="img/site/li.png"></a>
+        <a href="mailto:chengzh2008@gmail.com"><img src="img/site/mail.png"></a>
 
-        </div>
-    </footer>
-    <script src="bundle.js"></script>
+    </div>
+</footer>
+<script src="bundle.js"></script>
 </body>
 </html>
 

@@ -15,11 +15,6 @@ menu, nav, section {
   vertical-align: baseline;
   text-decoration: none; }
 
-section {
-  background-color: red;
-  background-image: -webkit-linear-gradient(bottom, red, orange);
-  background-image: linear-gradient(to top,red, orange); }
-
 html {
   font: 16px Helvetica, sans-serif;
   color: #333;
@@ -32,8 +27,27 @@ body {
 
 .landing {
   width: 80%;
-  background-color: #6666ff;
+  background-color: #00e600;
   height: 300px; }
+
+.logo {
+  font-size: 2em;
+  padding: 20px; }
+
+.nav ul {
+  width: 50%; }
+  .nav ul li {
+    float: left;
+    display: inline;
+    padding: 15px; }
+
+.login {
+  width: 20%;
+  float: right;
+  padding: 20px; }
+
+.contain {
+  clear: both; }
 
 footer .copyright {
   font-size: 1.5em;

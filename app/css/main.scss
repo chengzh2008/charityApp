@@ -27,9 +27,9 @@ menu, nav, section {
 
 }
 
-section {
-  @include linear-gradient(to top, red, orange);
-}
+
+
+
 
 html {
   font: 16px $font-stack;
@@ -44,33 +44,12 @@ body {
   width: 80%;
 }
 
-.landing {
-  width: 80%;
-  background-color: lighten($bg-color, 20%);
-  height: 300px;
+@import 'landing';
 
-}
+@import 'header';
 
-footer {
-  .copyright {
-    font-size: 1.5em;
-    width: 40%;
-    float: left;
-    padding: 20px;
-  }
-
-  .social {
-    width: 40%;
-    float: right;
-    padding: 10px;
-  }
+@import 'footer';
 
 
-  img {
-    float: right;
-    width: 50px;
-    height: 50px;
-  }
 
-}
 

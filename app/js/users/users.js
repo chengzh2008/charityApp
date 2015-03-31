@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function(app) {
-  app.run(['$rootScope', '$cookies', function($rootScope, $cookies) {
+  app.run(['$rootScope', '$cookies', '$location', function($rootScope, $cookies, $location) {
     $rootScope.logOut = function() {
       $cookies.token = '';
     };
