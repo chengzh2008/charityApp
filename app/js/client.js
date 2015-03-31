@@ -4,9 +4,8 @@ require('angular/angular');
 require('angular-route');
 require('angular-cookies');
 require('angular-base64');
-require('ng-file-upload');
 
-var helpOut = angular.module('helpOut', ['ngRoute', 'base64', 'ngCookies', 'angularFileUpload']);
+var helpOut = angular.module('helpOut', ['ngRoute', 'base64', 'ngCookies']);
 
 require('./users/users')(helpOut);
 
@@ -21,7 +20,6 @@ require('./organizer/controllers/organizer_controller')(helpOut);
 //require('./directives/dummy_directive')(helpOut);
 //require('./directives/create_resource_directive')(helpOut);
 require('./organizer/directives/edit_profile_directive')(helpOut);
-require('./users/directives/image_upload_directive')(helpOut);
 
 helpOut.config(['$routeProvider', function ($routeProvider) {
     $routeProvider

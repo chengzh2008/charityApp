@@ -3,16 +3,13 @@
 
     <h2>This the profile:</h2>
 
-    <button data-ng-click="toggleImageUpload()" id="imageUpload">Update Image</button>
-    <div data-image-upload-directive data-ng-if="imageUploading"></div>
-    <p data-ng-if="imageUploading"> testing...</p>
-
-    <img src="data:image/png;, + {{userImage.data}}" alt="picture"/>
+    <img src="{{currentUser.profileInfo.imgUrl}}" alt="picture"/>
     <button data-ng-click="toggleEditProfile()" id="edittingProfile">Edit Profile</button>
     <ul data-ng-if="!edittingProfile">
         <li><label>Email: </label> {{currentUser.profileInfo.email}}</li>
         <li><label>Type: </label> {{currentUser.profileInfo.role}}</li>
         <li><label>Name: </label> {{currentUser.profileInfo.orgName}}</li>
+        <li><label>Avatar url: </label> {{currentUser.profileInfo.imgUrl}}</li>
         <li><label>Contact firstname: </label> {{currentUser.profileInfo.firstname}}</li>
         <li><label>Contact lastname: </label> {{currentUser.profileInfo.lastname}}</li>
         <li><label>Mission: </label> {{currentUser.profileInfo.mission}}</li>

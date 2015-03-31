@@ -8,6 +8,7 @@ var mongoose = require('mongoose'),
             firstname: String,
             lastname: String
         },
+        imgUrl: {type: String, default: 'http://google.com/help/hc/images/helpouts/helpouts_icon_full_color.png'},
         ageReq: Boolean,
         city: String,
         bio: String,
