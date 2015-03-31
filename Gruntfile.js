@@ -13,6 +13,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-contrib-sass');
 
     // grunt initilization
     grunt.initConfig({
@@ -59,10 +60,22 @@ module.exports = function (grunt) {
             build: {
                 expand: true,
                 cwd: 'app/',
-                src: ['**/*.html', '**/*.css', 'directives', 'templates', 'img', 'css', 'fonts'],
+                src: ['**/*.html', 'directives', 'templates', 'img/**/*', 'css', 'fonts'],
                 dest: 'build/',
                 flatten: false,
                 filter: 'isFile'
+            }
+        },
+        sass: {
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: 'app/',
+                    src: ['**/*.scss'],
+                    dest: 'build',
+                    flatten: false,
+                    ext: '.css'
+                }]
             }
         },
         browserify: {
@@ -94,7 +107,7 @@ module.exports = function (grunt) {
     grunt.registerTask('default', ['test']);
 
     // register the tasks for front-end
-    grunt.registerTask('build', ['clean', 'browserify', 'copy']);
+    grunt.registerTask('build', ['clean', 'browserify', 'copy', 'sass']);
     grunt.registerTask('build:test', ['browserify:test']);
     grunt.registerTask('test:client', ['browserify:karmatest', 'karma:unit']);
 };
