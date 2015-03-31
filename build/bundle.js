@@ -3,11 +3,10 @@
 
 require("./../../bower_components/angular/angular");
 require('angular-route');
-require("./../../bower_components/angular-cookies/angular-cookies.js");
+require('angular-cookies');
 require("./../../bower_components/angular-base64/angular-base64.js");
-require("./../../bower_components/ng-file-upload/angular-file-upload.js");
 
-var helpOut = angular.module('helpOut', ['ngRoute', 'base64', 'ngCookies', 'angularFileUpload']);
+var helpOut = angular.module('helpOut', ['ngRoute', 'base64', 'ngCookies']);
 
 require('./users/users')(helpOut);
 
@@ -22,7 +21,6 @@ require('./organizer/controllers/organizer_controller')(helpOut);
 //require('./directives/dummy_directive')(helpOut);
 //require('./directives/create_resource_directive')(helpOut);
 require('./organizer/directives/edit_profile_directive')(helpOut);
-require('./users/directives/image_upload_directive')(helpOut);
 
 helpOut.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
@@ -53,72 +51,26 @@ helpOut.config(['$routeProvider', function ($routeProvider) {
         })
 }]);
 
-},{"./../../bower_components/angular-base64/angular-base64.js":15,"./../../bower_components/angular-cookies/angular-cookies.js":16,"./../../bower_components/angular/angular":17,"./../../bower_components/ng-file-upload/angular-file-upload.js":18,"./organizer/controllers/organizer_controller":5,"./organizer/directives/edit_profile_directive":7,"./services/api-service":8,"./services/resource_service":9,"./users/directives/image_upload_directive":13,"./users/users":14,"angular-route":20}],2:[function(require,module,exports){
-'use strict';
-
-module.exports = function(app) {
-  app.directive('createResourceDirective', function() {
-    return {
-      restrict: 'A',
-      replace: true,
-      templateUrl: 'templates/directives/resource_directive.html',
-      scope: {
-        save: '&',
-        fieldname: '=',
-        resourcename: '@'
-      },
-      controller: function($scope) {
-        $scope.saveResource = function() {
-          $scope.save({resource: $scope.resource});
-          $scope.resource = null;
-        };
-      }
-    }
-  });
-};
-
-},{}],3:[function(require,module,exports){
-'use strict';
-
-module.exports = function(app) {
-  app.directive('dummyDirective', function() {
-    return {
-      restrict: 'A',
-      template: '<p>{{someVal}}</p><input type="text" data-ng-model="someVal">',
-      scope: {}
-    }
-  });
-};
-
-},{}],4:[function(require,module,exports){
+},{"./../../bower_components/angular-base64/angular-base64.js":13,"./../../bower_components/angular/angular":14,"./organizer/controllers/organizer_controller":3,"./organizer/directives/edit_profile_directive":5,"./services/api-service":6,"./services/resource_service":7,"./users/users":12,"angular-cookies":16,"angular-route":18}],2:[function(require,module,exports){
 'use strict';
 
 module.exports = function() {
   return 'hello universe';
 };
 
-},{}],5:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 'use strict';
 
 module.exports = function (app) {
-    app.controller('organizerController', ['$scope', 'ApiService', '$cookies', '$location', '$upload', '$routeParams', function ($scope, ApiService, $cookies, $location, $upload, $routeParams) {
+    app.controller('organizerController', ['$scope', 'ApiService', '$cookies', '$location', '$routeParams', function ($scope, ApiService, $cookies, $location, $routeParams) {
 
         if (!$cookies.token || $cookies.token.length < 1)
             $location.path('/signup');
 
         $scope.currentUser = {};
         $scope.edittingProfile = false;
-        $scope.pictureUrl = '/api/v1/images/' + $routeParams.userId;
-        $scope.imageUploading = false;
-        $scope.userImage = {};
 
         $scope.getByUserId = function () {
-                    alert('successfully get image data');
-            ApiService.Image.getImageById($routeParams.userId)
-                .success(function (data) {
-                    $scope.userImage.data = data.toString();
-                    $scope.userImage.contentType = 'png'
-                });
             ApiService.Organizer.getByUserId($routeParams.userId)
                 .success(function (data, status) {
                     $scope.currentUser.profileInfo = data;
@@ -143,50 +95,15 @@ module.exports = function (app) {
                 });
         };
 
-        $scope.remove = function (note) {
-            ApiService.Organizer.remove(note, function () {
-                $scope.notes.splice($scope.notes.indexOf(note), 1);
-            });
-        };
 
         $scope.toggleEditProfile = function () {
             $scope.edittingProfile = !$scope.edittingProfile
         };
 
-        $scope.toggleImageUpload = function () {
-            $scope.imageUploading = !$scope.imageUploading;
-        };
-
-        $scope.onFileSelect = function(image) {
-            alert('testing...');
-            if (angular.isArray(image)) {
-                image = image[0];
-            }
-
-            if (image.type !== 'image/png' && image.type !== 'image/jpeg') {
-                alert('Only PNG and JPEG are accepted.');
-                return;
-            }
-
-            $scope.uploadInProgress = true;
-            $scope.uploadProgress = 0;
-
-            $scope.upload = $upload.upload({
-                url: '/upload/image',
-                method: 'POST',
-                file: image
-            }).success(function(data, status, headers, config) {
-                $scope.uploadedImage = JSON.parse(data);
-                $location.path('/organizer/' + data.userId);
-            }).error(function(err) {
-                $scope.uploadInProgress = false;
-                console.log('Error uploading file: ' + err.message || err);
-            });
-        };
     }]);
 };
 
-},{}],6:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 'use strict';
 
 module.exports = function(app) {
@@ -199,7 +116,7 @@ module.exports = function(app) {
   });
 };
 
-},{}],7:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 module.exports = function(app) {
@@ -212,7 +129,7 @@ module.exports = function(app) {
     });
 };
 
-},{}],8:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 module.exports = function (app) {
@@ -251,7 +168,7 @@ module.exports = function (app) {
             };
         }]);
 };
-},{}],9:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 module.exports = function(app) {
@@ -331,7 +248,7 @@ module.exports = function(app) {
   }]);
 };
 
-},{}],10:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 module.exports = function (app) {
@@ -371,7 +288,7 @@ module.exports = function (app) {
 
 
 }
-},{}],11:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 module.exports = function (app) {
@@ -393,7 +310,7 @@ module.exports = function (app) {
     }]);
 };
 
-},{}],12:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 module.exports = function (app) {
@@ -426,7 +343,7 @@ module.exports = function (app) {
     }]);
 };
 
-},{}],13:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 module.exports = function(app) {
@@ -439,7 +356,7 @@ module.exports = function(app) {
     });
 };
 
-},{}],14:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 module.exports = function(app) {
@@ -456,7 +373,7 @@ module.exports = function(app) {
   require('./controllers/signin_controller')(app);
 };
 
-},{"./controllers/signin_controller":11,"./controllers/signup_controller":12}],15:[function(require,module,exports){
+},{"./controllers/signin_controller":9,"./controllers/signup_controller":10}],13:[function(require,module,exports){
 (function() {
     'use strict';
 
@@ -624,215 +541,7 @@ module.exports = function(app) {
 
 })();
 
-},{}],16:[function(require,module,exports){
-/**
- * @license AngularJS v1.3.15
- * (c) 2010-2014 Google, Inc. http://angularjs.org
- * License: MIT
- */
-(function(window, angular, undefined) {'use strict';
-
-/**
- * @ngdoc module
- * @name ngCookies
- * @description
- *
- * # ngCookies
- *
- * The `ngCookies` module provides a convenient wrapper for reading and writing browser cookies.
- *
- *
- * <div doc-module-components="ngCookies"></div>
- *
- * See {@link ngCookies.$cookies `$cookies`} and
- * {@link ngCookies.$cookieStore `$cookieStore`} for usage.
- */
-
-
-angular.module('ngCookies', ['ng']).
-  /**
-   * @ngdoc service
-   * @name $cookies
-   *
-   * @description
-   * Provides read/write access to browser's cookies.
-   *
-   * Only a simple Object is exposed and by adding or removing properties to/from this object, new
-   * cookies are created/deleted at the end of current $eval.
-   * The object's properties can only be strings.
-   *
-   * Requires the {@link ngCookies `ngCookies`} module to be installed.
-   *
-   * @example
-   *
-   * ```js
-   * angular.module('cookiesExample', ['ngCookies'])
-   *   .controller('ExampleController', ['$cookies', function($cookies) {
-   *     // Retrieving a cookie
-   *     var favoriteCookie = $cookies.myFavorite;
-   *     // Setting a cookie
-   *     $cookies.myFavorite = 'oatmeal';
-   *   }]);
-   * ```
-   */
-   factory('$cookies', ['$rootScope', '$browser', function($rootScope, $browser) {
-      var cookies = {},
-          lastCookies = {},
-          lastBrowserCookies,
-          runEval = false,
-          copy = angular.copy,
-          isUndefined = angular.isUndefined;
-
-      //creates a poller fn that copies all cookies from the $browser to service & inits the service
-      $browser.addPollFn(function() {
-        var currentCookies = $browser.cookies();
-        if (lastBrowserCookies != currentCookies) { //relies on browser.cookies() impl
-          lastBrowserCookies = currentCookies;
-          copy(currentCookies, lastCookies);
-          copy(currentCookies, cookies);
-          if (runEval) $rootScope.$apply();
-        }
-      })();
-
-      runEval = true;
-
-      //at the end of each eval, push cookies
-      //TODO: this should happen before the "delayed" watches fire, because if some cookies are not
-      //      strings or browser refuses to store some cookies, we update the model in the push fn.
-      $rootScope.$watch(push);
-
-      return cookies;
-
-
-      /**
-       * Pushes all the cookies from the service to the browser and verifies if all cookies were
-       * stored.
-       */
-      function push() {
-        var name,
-            value,
-            browserCookies,
-            updated;
-
-        //delete any cookies deleted in $cookies
-        for (name in lastCookies) {
-          if (isUndefined(cookies[name])) {
-            $browser.cookies(name, undefined);
-          }
-        }
-
-        //update all cookies updated in $cookies
-        for (name in cookies) {
-          value = cookies[name];
-          if (!angular.isString(value)) {
-            value = '' + value;
-            cookies[name] = value;
-          }
-          if (value !== lastCookies[name]) {
-            $browser.cookies(name, value);
-            updated = true;
-          }
-        }
-
-        //verify what was actually stored
-        if (updated) {
-          updated = false;
-          browserCookies = $browser.cookies();
-
-          for (name in cookies) {
-            if (cookies[name] !== browserCookies[name]) {
-              //delete or reset all cookies that the browser dropped from $cookies
-              if (isUndefined(browserCookies[name])) {
-                delete cookies[name];
-              } else {
-                cookies[name] = browserCookies[name];
-              }
-              updated = true;
-            }
-          }
-        }
-      }
-    }]).
-
-
-  /**
-   * @ngdoc service
-   * @name $cookieStore
-   * @requires $cookies
-   *
-   * @description
-   * Provides a key-value (string-object) storage, that is backed by session cookies.
-   * Objects put or retrieved from this storage are automatically serialized or
-   * deserialized by angular's toJson/fromJson.
-   *
-   * Requires the {@link ngCookies `ngCookies`} module to be installed.
-   *
-   * @example
-   *
-   * ```js
-   * angular.module('cookieStoreExample', ['ngCookies'])
-   *   .controller('ExampleController', ['$cookieStore', function($cookieStore) {
-   *     // Put cookie
-   *     $cookieStore.put('myFavorite','oatmeal');
-   *     // Get cookie
-   *     var favoriteCookie = $cookieStore.get('myFavorite');
-   *     // Removing a cookie
-   *     $cookieStore.remove('myFavorite');
-   *   }]);
-   * ```
-   */
-   factory('$cookieStore', ['$cookies', function($cookies) {
-
-      return {
-        /**
-         * @ngdoc method
-         * @name $cookieStore#get
-         *
-         * @description
-         * Returns the value of given cookie key
-         *
-         * @param {string} key Id to use for lookup.
-         * @returns {Object} Deserialized cookie value.
-         */
-        get: function(key) {
-          var value = $cookies[key];
-          return value ? angular.fromJson(value) : value;
-        },
-
-        /**
-         * @ngdoc method
-         * @name $cookieStore#put
-         *
-         * @description
-         * Sets a value for given cookie key
-         *
-         * @param {string} key Id for the `value`.
-         * @param {Object} value Value to be stored.
-         */
-        put: function(key, value) {
-          $cookies[key] = angular.toJson(value);
-        },
-
-        /**
-         * @ngdoc method
-         * @name $cookieStore#remove
-         *
-         * @description
-         * Remove given cookie
-         *
-         * @param {string} key Id of the key-value pair to delete.
-         */
-        remove: function(key) {
-          delete $cookies[key];
-        }
-      };
-
-    }]);
-
-
-})(window, window.angular);
-
-},{}],17:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /**
  * @license AngularJS v1.3.15
  * (c) 2010-2014 Google, Inc. http://angularjs.org
@@ -27142,587 +26851,219 @@ var minlengthDirective = function() {
 })(window, document);
 
 !window.angular.$$csp() && window.angular.element(document).find('head').prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}</style>');
-},{}],18:[function(require,module,exports){
-/**!
- * AngularJS file upload/drop directive and service with progress and abort
- * @author  Danial  <danial.farid@gmail.com>
- * @version 3.2.4
+},{}],15:[function(require,module,exports){
+/**
+ * @license AngularJS v1.3.15
+ * (c) 2010-2014 Google, Inc. http://angularjs.org
+ * License: MIT
  */
-(function () {
+(function(window, angular, undefined) {'use strict';
 
-var key, i;
-function patchXHR(fnName, newFn) {
-    window.XMLHttpRequest.prototype[fnName] = newFn(window.XMLHttpRequest.prototype[fnName]);
-}
+/**
+ * @ngdoc module
+ * @name ngCookies
+ * @description
+ *
+ * # ngCookies
+ *
+ * The `ngCookies` module provides a convenient wrapper for reading and writing browser cookies.
+ *
+ *
+ * <div doc-module-components="ngCookies"></div>
+ *
+ * See {@link ngCookies.$cookies `$cookies`} and
+ * {@link ngCookies.$cookieStore `$cookieStore`} for usage.
+ */
 
-if (window.XMLHttpRequest && !window.XMLHttpRequest.__isFileAPIShim) {
-    patchXHR('setRequestHeader', function (orig) {
-        return function (header, value) {
-            if (header === '__setXHR_') {
-                var val = value(this);
-                // fix for angular < 1.2.0
-                if (val instanceof Function) {
-                    val(this);
-                }
-            } else {
-                orig.apply(this, arguments);
-            }
+
+angular.module('ngCookies', ['ng']).
+  /**
+   * @ngdoc service
+   * @name $cookies
+   *
+   * @description
+   * Provides read/write access to browser's cookies.
+   *
+   * Only a simple Object is exposed and by adding or removing properties to/from this object, new
+   * cookies are created/deleted at the end of current $eval.
+   * The object's properties can only be strings.
+   *
+   * Requires the {@link ngCookies `ngCookies`} module to be installed.
+   *
+   * @example
+   *
+   * ```js
+   * angular.module('cookiesExample', ['ngCookies'])
+   *   .controller('ExampleController', ['$cookies', function($cookies) {
+   *     // Retrieving a cookie
+   *     var favoriteCookie = $cookies.myFavorite;
+   *     // Setting a cookie
+   *     $cookies.myFavorite = 'oatmeal';
+   *   }]);
+   * ```
+   */
+   factory('$cookies', ['$rootScope', '$browser', function($rootScope, $browser) {
+      var cookies = {},
+          lastCookies = {},
+          lastBrowserCookies,
+          runEval = false,
+          copy = angular.copy,
+          isUndefined = angular.isUndefined;
+
+      //creates a poller fn that copies all cookies from the $browser to service & inits the service
+      $browser.addPollFn(function() {
+        var currentCookies = $browser.cookies();
+        if (lastBrowserCookies != currentCookies) { //relies on browser.cookies() impl
+          lastBrowserCookies = currentCookies;
+          copy(currentCookies, lastCookies);
+          copy(currentCookies, cookies);
+          if (runEval) $rootScope.$apply();
         }
-    });
-}
+      })();
 
-var angularFileUpload = angular.module('angularFileUpload', []);
+      runEval = true;
 
-angularFileUpload.version = '3.2.4';
-angularFileUpload.service('$upload', ['$http', '$q', '$timeout', function ($http, $q, $timeout) {
-    function sendHttp(config) {
-        config.method = config.method || 'POST';
-        config.headers = config.headers || {};
-        config.transformRequest = config.transformRequest || function (data, headersGetter) {
-            if (window.ArrayBuffer && data instanceof window.ArrayBuffer) {
-                return data;
-            }
-            return $http.defaults.transformRequest[0](data, headersGetter);
-        };
-        var deferred = $q.defer();
-        var promise = deferred.promise;
+      //at the end of each eval, push cookies
+      //TODO: this should happen before the "delayed" watches fire, because if some cookies are not
+      //      strings or browser refuses to store some cookies, we update the model in the push fn.
+      $rootScope.$watch(push);
 
-        config.headers['__setXHR_'] = function () {
-            return function (xhr) {
-                if (!xhr) return;
-                config.__XHR = xhr;
-                config.xhrFn && config.xhrFn(xhr);
-                xhr.upload.addEventListener('progress', function (e) {
-                    e.config = config;
-                    deferred.notify ? deferred.notify(e) : promise.progress_fn && $timeout(function () {
-                        promise.progress_fn(e)
-                    });
-                }, false);
-                //fix for firefox not firing upload progress end, also IE8-9
-                xhr.upload.addEventListener('load', function (e) {
-                    if (e.lengthComputable) {
-                        e.config = config;
-                        deferred.notify ? deferred.notify(e) : promise.progress_fn && $timeout(function () {
-                            promise.progress_fn(e)
-                        });
-                    }
-                }, false);
-            };
-        };
+      return cookies;
 
-        $http(config).then(function (r) {
-            deferred.resolve(r)
-        }, function (e) {
-            deferred.reject(e)
-        }, function (n) {
-            deferred.notify(n)
-        });
 
-        promise.success = function (fn) {
-            promise.then(function (response) {
-                fn(response.data, response.status, response.headers, config);
-            });
-            return promise;
-        };
+      /**
+       * Pushes all the cookies from the service to the browser and verifies if all cookies were
+       * stored.
+       */
+      function push() {
+        var name,
+            value,
+            browserCookies,
+            updated;
 
-        promise.error = function (fn) {
-            promise.then(null, function (response) {
-                fn(response.data, response.status, response.headers, config);
-            });
-            return promise;
-        };
-
-        promise.progress = function (fn) {
-            promise.progress_fn = fn;
-            promise.then(null, null, function (update) {
-                fn(update);
-            });
-            return promise;
-        };
-        promise.abort = function () {
-            if (config.__XHR) {
-                $timeout(function () {
-                    config.__XHR.abort();
-                });
-            }
-            return promise;
-        };
-        promise.xhr = function (fn) {
-            config.xhrFn = (function (origXhrFn) {
-                return function () {
-                    origXhrFn && origXhrFn.apply(promise, arguments);
-                    fn.apply(promise, arguments);
-                }
-            })(config.xhrFn);
-            return promise;
-        };
-
-        return promise;
-    }
-
-    this.upload = function (config) {
-        config.headers = config.headers || {};
-        config.headers['Content-Type'] = undefined;
-        config.transformRequest = config.transformRequest ?
-            (Object.prototype.toString.call(config.transformRequest) === '[object Array]' ?
-                config.transformRequest : [config.transformRequest]) : [];
-        config.transformRequest.push(function (data) {
-            var formData = new FormData();
-            var allFields = {};
-            for (key in config.fields) {
-                if (config.fields.hasOwnProperty(key)) {
-                    allFields[key] = config.fields[key];
-                }
-            }
-            if (data) allFields['data'] = data;
-
-            if (config.formDataAppender) {
-                for (key in allFields) {
-                    if (allFields.hasOwnProperty(key)) {
-                        config.formDataAppender(formData, key, allFields[key]);
-                    }
-                }
-            } else {
-                for (key in allFields) {
-                    if (allFields.hasOwnProperty(key)) {
-                        var val = allFields[key];
-                        if (val !== undefined) {
-                            if (Object.prototype.toString.call(val) === '[object String]') {
-                                formData.append(key, val);
-                            } else {
-                                if (config.sendObjectsAsJsonBlob && typeof val === 'object') {
-                                    formData.append(key, new Blob([val], {type: 'application/json'}));
-                                } else {
-                                    formData.append(key, JSON.stringify(val));
-                                }
-                            }
-
-                        }
-                    }
-                }
-            }
-
-            if (config.file != null) {
-                var fileFormName = config.fileFormDataName || 'file';
-
-                if (Object.prototype.toString.call(config.file) === '[object Array]') {
-                    var isFileFormNameString = Object.prototype.toString.call(fileFormName) === '[object String]';
-                    for (i = 0; i < config.file.length; i++) {
-                        formData.append(isFileFormNameString ? fileFormName : fileFormName[i], config.file[i],
-                            (config.fileName && config.fileName[i]) || config.file[i].name);
-                    }
-                } else {
-                    formData.append(fileFormName, config.file, config.fileName || config.file.name);
-                }
-            }
-            return formData;
-        });
-
-        return sendHttp(config);
-    };
-
-    this.http = function (config) {
-        return sendHttp(config);
-    };
-}]);
-
-angularFileUpload.directive('ngFileSelect', ['$parse', '$timeout', '$compile',
-    function ($parse, $timeout, $compile) {
-        return {
-            restrict: 'AEC',
-            require: '?ngModel',
-            link: function (scope, elem, attr, ngModel) {
-                linkFileSelect(scope, elem, attr, ngModel, $parse, $timeout, $compile);
-            }
+        //delete any cookies deleted in $cookies
+        for (name in lastCookies) {
+          if (isUndefined(cookies[name])) {
+            $browser.cookies(name, undefined);
+          }
         }
+
+        //update all cookies updated in $cookies
+        for (name in cookies) {
+          value = cookies[name];
+          if (!angular.isString(value)) {
+            value = '' + value;
+            cookies[name] = value;
+          }
+          if (value !== lastCookies[name]) {
+            $browser.cookies(name, value);
+            updated = true;
+          }
+        }
+
+        //verify what was actually stored
+        if (updated) {
+          updated = false;
+          browserCookies = $browser.cookies();
+
+          for (name in cookies) {
+            if (cookies[name] !== browserCookies[name]) {
+              //delete or reset all cookies that the browser dropped from $cookies
+              if (isUndefined(browserCookies[name])) {
+                delete cookies[name];
+              } else {
+                cookies[name] = browserCookies[name];
+              }
+              updated = true;
+            }
+          }
+        }
+      }
+    }]).
+
+
+  /**
+   * @ngdoc service
+   * @name $cookieStore
+   * @requires $cookies
+   *
+   * @description
+   * Provides a key-value (string-object) storage, that is backed by session cookies.
+   * Objects put or retrieved from this storage are automatically serialized or
+   * deserialized by angular's toJson/fromJson.
+   *
+   * Requires the {@link ngCookies `ngCookies`} module to be installed.
+   *
+   * @example
+   *
+   * ```js
+   * angular.module('cookieStoreExample', ['ngCookies'])
+   *   .controller('ExampleController', ['$cookieStore', function($cookieStore) {
+   *     // Put cookie
+   *     $cookieStore.put('myFavorite','oatmeal');
+   *     // Get cookie
+   *     var favoriteCookie = $cookieStore.get('myFavorite');
+   *     // Removing a cookie
+   *     $cookieStore.remove('myFavorite');
+   *   }]);
+   * ```
+   */
+   factory('$cookieStore', ['$cookies', function($cookies) {
+
+      return {
+        /**
+         * @ngdoc method
+         * @name $cookieStore#get
+         *
+         * @description
+         * Returns the value of given cookie key
+         *
+         * @param {string} key Id to use for lookup.
+         * @returns {Object} Deserialized cookie value.
+         */
+        get: function(key) {
+          var value = $cookies[key];
+          return value ? angular.fromJson(value) : value;
+        },
+
+        /**
+         * @ngdoc method
+         * @name $cookieStore#put
+         *
+         * @description
+         * Sets a value for given cookie key
+         *
+         * @param {string} key Id for the `value`.
+         * @param {Object} value Value to be stored.
+         */
+        put: function(key, value) {
+          $cookies[key] = angular.toJson(value);
+        },
+
+        /**
+         * @ngdoc method
+         * @name $cookieStore#remove
+         *
+         * @description
+         * Remove given cookie
+         *
+         * @param {string} key Id of the key-value pair to delete.
+         */
+        remove: function(key) {
+          delete $cookies[key];
+        }
+      };
+
     }]);
 
-function linkFileSelect(scope, elem, attr, ngModel, $parse, $timeout, $compile) {
-    function isInputTypeFile() {
-        return elem[0].tagName.toLowerCase() === 'input' && elem.attr('type') && elem.attr('type').toLowerCase() === 'file';
-    }
 
-    var isUpdating = false;
-    function changeFn(evt) {
-        if (!isUpdating) {
-            isUpdating = true;
-            try {
-                var fileList = evt.__files_ || (evt.target && evt.target.files);
-                var files = [], rejFiles = [];
+})(window, window.angular);
 
-                var accept = $parse(attr.ngAccept);
-                for (i = 0; i < fileList.length; i++) {
-                    var file = fileList.item(i);
-                    if (isAccepted(scope, accept, file, evt)) {
-                        files.push(file);
-                    } else {
-                        rejFiles.push(file);
-                    }
-                }
-                updateModel($parse, $timeout, scope, ngModel, attr,
-                    attr.ngFileChange || attr.ngFileSelect, files, rejFiles, evt);
-                if (files.length == 0) evt.target.value = files;
-                if (evt.target && evt.target.getAttribute('__ngf_gen__')) {
-                    angular.element(evt.target).remove();
-                }
-            } finally {
-                isUpdating = false;
-            }
-        }
-    }
+},{}],16:[function(require,module,exports){
+require('./angular-cookies');
+module.exports = 'ngCookies';
 
-    function bindAttrToFileInput(fileElem) {
-        if (attr.ngMultiple) fileElem.attr('multiple', $parse(attr.ngMultiple)(scope));
-        if (attr['accept']) fileElem.attr('accept', attr['accept']);
-        if (attr.ngCapture) fileElem.attr('capture', $parse(attr.ngCapture)(scope));
-        if (attr.ngDisabled) fileElem.attr('disabled', $parse(attr.ngDisabled)(scope));
-
-        fileElem.bind('change', changeFn);
-    }
-
-    function createFileInput(evt) {
-        if (elem.attr('disabled')) {
-            return;
-        }
-        var fileElem = angular.element('<input type="file">');
-
-        for (var i = 0; i < elem[0].attributes.length; i++) {
-            var attribute = elem[0].attributes[i];
-            fileElem.attr(attribute.name, attribute.value);
-        }
-
-        if (isInputTypeFile()) {
-            elem.replaceWith(fileElem);
-            elem = fileElem;
-        } else {
-            fileElem.css('width', '0px').css('height', '0px').css('position', 'absolute')
-                .css('padding', 0).css('margin', 0).css('overflow', 'hidden')
-                .attr('tabindex', '-1').css('opacity', 0).attr('__ngf_gen__', true);
-            if (elem.__ngf_ref_elem__) elem.__ngf_ref_elem__.remove();
-            elem.__ngf_ref_elem__ = fileElem;
-            elem.parent()[0].insertBefore(fileElem[0], elem[0]);
-            elem.css('overflow', 'hidden');
-        }
-
-        bindAttrToFileInput(fileElem);
-
-        return fileElem;
-    }
-
-    function resetModel(evt) {
-        updateModel($parse, $timeout, scope, ngModel, attr,
-            attr.ngFileChange || attr.ngFileSelect, [], [], evt, true);
-    }
-
-    function clickHandler(evt) {
-        var fileElem = createFileInput(evt);
-        if (fileElem) {
-            resetModel(evt);
-
-            fileElem[0].click();
-        }
-        if (isInputTypeFile()) {
-            elem.bind('click', clickHandler);
-            evt.preventDefault()
-        }
-    }
-
-    if (window.FileAPI && window.FileAPI.ngfFixIE) {
-        window.FileAPI.ngfFixIE(elem, createFileInput, changeFn, resetModel);
-    } else {
-        elem.bind('click', clickHandler);
-    }
-}
-
-angularFileUpload.directive('ngFileDrop', ['$parse', '$timeout', '$location', function ($parse, $timeout, $location) {
-    return {
-        restrict: 'AEC',
-        require: '?ngModel',
-        link: function (scope, elem, attr, ngModel) {
-            linkDrop(scope, elem, attr, ngModel, $parse, $timeout, $location);
-        }
-    }
-}]);
-
-angularFileUpload.directive('ngNoFileDrop', function () {
-    return function (scope, elem) {
-        if (dropAvailable()) elem.css('display', 'none')
-    }
-});
-
-//for backward compatibility
-angularFileUpload.directive('ngFileDropAvailable', ['$parse', '$timeout', function ($parse, $timeout) {
-    return function (scope, elem, attr) {
-        if (dropAvailable()) {
-            var fn = $parse(attr['ngFileDropAvailable']);
-            $timeout(function () {
-                fn(scope);
-            });
-        }
-    }
-}]);
-
-function linkDrop(scope, elem, attr, ngModel, $parse, $timeout, $location) {
-    var available = dropAvailable();
-    if (attr['dropAvailable']) {
-        $timeout(function () {
-            scope.dropAvailable ? scope.dropAvailable.value = available :
-                scope.dropAvailable = available;
-        });
-    }
-    if (!available) {
-        if ($parse(attr.hideOnDropNotAvailable)(scope) == true) {
-            elem.css('display', 'none');
-        }
-        return;
-    }
-    var leaveTimeout = null;
-    var stopPropagation = $parse(attr.stopPropagation);
-    var dragOverDelay = 1;
-    var accept = $parse(attr.ngAccept);
-    var disabled = $parse(attr.ngDisabled);
-    var actualDragOverClass;
-
-    elem[0].addEventListener('dragover', function (evt) {
-        if (disabled(scope)) return;
-        evt.preventDefault();
-        if (stopPropagation(scope)) evt.stopPropagation();
-        // handling dragover events from the Chrome download bar
-        if (navigator.userAgent.indexOf("Chrome") > -1) {
-            var b = evt.dataTransfer.effectAllowed;
-            evt.dataTransfer.dropEffect = ('move' === b || 'linkMove' === b) ? 'move' : 'copy';
-        }
-        $timeout.cancel(leaveTimeout);
-        if (!scope.actualDragOverClass) {
-            actualDragOverClass = calculateDragOverClass(scope, attr, evt);
-        }
-        elem.addClass(actualDragOverClass);
-    }, false);
-    elem[0].addEventListener('dragenter', function (evt) {
-        if (disabled(scope)) return;
-        evt.preventDefault();
-        if (stopPropagation(scope)) evt.stopPropagation();
-    }, false);
-    elem[0].addEventListener('dragleave', function () {
-        if (disabled(scope)) return;
-        leaveTimeout = $timeout(function () {
-            elem.removeClass(actualDragOverClass);
-            actualDragOverClass = null;
-        }, dragOverDelay || 1);
-    }, false);
-    elem[0].addEventListener('drop', function (evt) {
-        if (disabled(scope)) return;
-        evt.preventDefault();
-        if (stopPropagation(scope)) evt.stopPropagation();
-        elem.removeClass(actualDragOverClass);
-        actualDragOverClass = null;
-        extractFiles(evt, function (files, rejFiles) {
-            updateModel($parse, $timeout, scope, ngModel, attr,
-                attr.ngFileChange || attr.ngFileDrop, files, rejFiles, evt)
-        }, $parse(attr.allowDir)(scope) != false, attr.multiple || $parse(attr.ngMultiple)(scope));
-    }, false);
-
-    function calculateDragOverClass(scope, attr, evt) {
-        var accepted = true;
-        var items = evt.dataTransfer.items;
-        if (items != null) {
-            for (i = 0; i < items.length && accepted; i++) {
-                accepted = accepted
-                    && (items[i].kind == 'file' || items[i].kind == '')
-                    && isAccepted(scope, accept, items[i], evt);
-            }
-        }
-        var clazz = $parse(attr.dragOverClass)(scope, {$event: evt});
-        if (clazz) {
-            if (clazz.delay) dragOverDelay = clazz.delay;
-            if (clazz.accept) clazz = accepted ? clazz.accept : clazz.reject;
-        }
-        return clazz || attr['dragOverClass'] || 'dragover';
-    }
-
-    function extractFiles(evt, callback, allowDir, multiple) {
-        var files = [], rejFiles = [], items = evt.dataTransfer.items, processing = 0;
-
-        function addFile(file) {
-            if (isAccepted(scope, accept, file, evt)) {
-                files.push(file);
-            } else {
-                rejFiles.push(file);
-            }
-        }
-
-        if (items && items.length > 0 && $location.protocol() != 'file') {
-            for (i = 0; i < items.length; i++) {
-                if (items[i].webkitGetAsEntry && items[i].webkitGetAsEntry() && items[i].webkitGetAsEntry().isDirectory) {
-                    var entry = items[i].webkitGetAsEntry();
-                    if (entry.isDirectory && !allowDir) {
-                        continue;
-                    }
-                    if (entry != null) {
-                        traverseFileTree(files, entry);
-                    }
-                } else {
-                    var f = items[i].getAsFile();
-                    if (f != null) addFile(f);
-                }
-                if (!multiple && files.length > 0) break;
-            }
-        } else {
-            var fileList = evt.dataTransfer.files;
-            if (fileList != null) {
-                for (i = 0; i < fileList.length; i++) {
-                    addFile(fileList.item(i));
-                    if (!multiple && files.length > 0) break;
-                }
-            }
-        }
-        var delays = 0;
-        (function waitForProcess(delay) {
-            $timeout(function () {
-                if (!processing) {
-                    if (!multiple && files.length > 1) {
-                        i = 0;
-                        while (files[i].type == 'directory') i++;
-                        files = [files[i]];
-                    }
-                    callback(files, rejFiles);
-                } else {
-                    if (delays++ * 10 < 20 * 1000) {
-                        waitForProcess(10);
-                    }
-                }
-            }, delay || 0)
-        })();
-
-        function traverseFileTree(files, entry, path) {
-            if (entry != null) {
-                if (entry.isDirectory) {
-                    var filePath = (path || '') + entry.name;
-                    addFile({name: entry.name, type: 'directory', path: filePath});
-                    var dirReader = entry.createReader();
-                    var entries = [];
-                    processing++;
-                    var readEntries = function () {
-                        dirReader.readEntries(function (results) {
-                            try {
-                                if (!results.length) {
-                                    for (i = 0; i < entries.length; i++) {
-                                        traverseFileTree(files, entries[i], (path ? path : '') + entry.name + '/');
-                                    }
-                                    processing--;
-                                } else {
-                                    entries = entries.concat(Array.prototype.slice.call(results || [], 0));
-                                    readEntries();
-                                }
-                            } catch (e) {
-                                processing--;
-                                console.error(e);
-                            }
-                        }, function () {
-                            processing--;
-                        });
-                    };
-                    readEntries();
-                } else {
-                    processing++;
-                    entry.file(function (file) {
-                        try {
-                            processing--;
-                            file.path = (path ? path : '') + file.name;
-                            addFile(file);
-                        } catch (e) {
-                            processing--;
-                            console.error(e);
-                        }
-                    }, function () {
-                        processing--;
-                    });
-                }
-            }
-        }
-    }
-}
-
-function dropAvailable() {
-    var div = document.createElement('div');
-    return ('draggable' in div) && ('ondrop' in div);
-}
-
-function updateModel($parse, $timeout, scope, ngModel, attr, fileChange, files, rejFiles, evt, noDelay) {
-    function update() {
-        if (ngModel) {
-            $parse(attr.ngModel).assign(scope, files);
-            $timeout(function () {
-                ngModel && ngModel.$setViewValue(files != null && files.length == 0 ? null : files);
-            });
-        }
-        if (attr.ngModelRejected) {
-            $parse(attr.ngModelRejected).assign(scope, rejFiles);
-        }
-        if (fileChange) {
-            $parse(fileChange)(scope, {
-                $files: files,
-                $rejectedFiles: rejFiles,
-                $event: evt
-            });
-
-        }
-    }
-    if (noDelay) {
-        update();
-    } else {
-        $timeout(function () {
-            update();
-        });
-    }
-}
-
-function isAccepted(scope, accept, file, evt) {
-    var val = accept(scope, {$file: file, $event: evt});
-    if (val == null) {
-        return true;
-    }
-    if (angular.isString(val)) {
-        var regexp = new RegExp(globStringToRegex(val), 'gi')
-        val = (file.type != null && file.type.match(regexp)) ||
-        (file.name != null && file.name.match(regexp));
-    }
-    return val;
-}
-
-function globStringToRegex(str) {
-    if (str.length > 2 && str[0] === '/' && str[str.length - 1] === '/') {
-        return str.substring(1, str.length - 1);
-    }
-    var split = str.split(','), result = '';
-    if (split.length > 1) {
-        for (i = 0; i < split.length; i++) {
-            result += '(' + globStringToRegex(split[i]) + ')';
-            if (i < split.length - 1) {
-                result += '|'
-            }
-        }
-    } else {
-        if (str.indexOf('.') == 0) {
-            str = '*' + str;
-        }
-        result = '^' + str.replace(new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\' + '-]', 'g'), '\\$&') + '$';
-        result = result.replace(/\\\*/g, '.*').replace(/\\\?/g, '.');
-    }
-    return result;
-}
-
-var ngFileUpload = angular.module('ngFileUpload', []);
-
-for (key in angularFileUpload) {
-    if (angularFileUpload.hasOwnProperty(key)) {
-        ngFileUpload[key] = angularFileUpload[key];
-    }
-}
-
-})();
-
-},{}],19:[function(require,module,exports){
+},{"./angular-cookies":15}],17:[function(require,module,exports){
 /**
  * @license AngularJS v1.3.15
  * (c) 2010-2014 Google, Inc. http://angularjs.org
@@ -28713,8 +28054,8 @@ function ngViewFillContentFactory($compile, $controller, $route) {
 
 })(window, window.angular);
 
-},{}],20:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 require('./angular-route');
 module.exports = 'ngRoute';
 
-},{"./angular-route":19}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14]);
+},{"./angular-route":17}]},{},[1,2,3,4,5,6,7,8,9,10,11,12]);
