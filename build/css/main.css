@@ -1,0 +1,52 @@
+html, body, div, span,
+h1, h2, h3, h4, h5, h6, p, blockquote,
+a, em, img, strong,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, section {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  text-decoration: none; }
+
+section {
+  background-color: red;
+  background-image: -webkit-linear-gradient(bottom, red, orange);
+  background-image: linear-gradient(to top,red, orange); }
+
+html {
+  font: 16px Helvetica, sans-serif;
+  color: #333;
+  margin: 0 0 0 0;
+  background-color: blue; }
+
+body {
+  margin: auto;
+  width: 80%; }
+
+.landing {
+  width: 80%;
+  background-color: #6666ff;
+  height: 300px; }
+
+footer .copyright {
+  font-size: 1.5em;
+  width: 40%;
+  float: left;
+  padding: 20px; }
+footer .social {
+  width: 40%;
+  float: right;
+  padding: 10px; }
+footer img {
+  float: right;
+  width: 50px;
+  height: 50px; }
+
+/*# sourceMappingURL=main.css.map */

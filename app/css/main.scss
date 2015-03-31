@@ -1,0 +1,76 @@
+@import '../../bourbon/bourbon';
+
+
+$font-stack:    Helvetica, sans-serif;
+$font-size: 16px;
+$primary-color: #333;
+$bg-color: blue;
+
+
+
+html, body, div, span,
+h1, h2, h3, h4, h5, h6, p, blockquote,
+a, em, img, strong,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, section {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  text-decoration: none;
+
+}
+
+section {
+  @include linear-gradient(to top, red, orange);
+}
+
+html {
+  font: 16px $font-stack;
+  color: $primary-color;
+  margin: 0 0 0 0;
+  background-color: $bg-color;
+}
+
+
+body {
+  margin: auto;
+  width: 80%;
+}
+
+.landing {
+  width: 80%;
+  background-color: lighten($bg-color, 20%);
+  height: 300px;
+
+}
+
+footer {
+  .copyright {
+    font-size: 1.5em;
+    width: 40%;
+    float: left;
+    padding: 20px;
+  }
+
+  .social {
+    width: 40%;
+    float: right;
+    padding: 10px;
+  }
+
+
+  img {
+    float: right;
+    width: 50px;
+    height: 50px;
+  }
+
+}
+

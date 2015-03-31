@@ -1,0 +1,85 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span,
+h1, h2, h3, h4, h5, h6, p, blockquote,
+a, em, img, strong,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, section {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  text-decoration: none;
+  font-family: Cicle;
+
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+p, h1, h2, li {
+  font-size: 4em;
+}
+
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+
+input {
+  font-size: .5em;
+  margin: .2em;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+
+
+a {
+  color: #ccb20a;
+  font-size: 1.2em;
+}
+
+h1, h2 {
+  padding-bottom: .2em;
+  font-size: 1.618em;
+}
+
+p {
+  padding: .5em 0;
+}
+
+img {
+  display: block;
+  width: 100%;
+}
+
+strong {
+  font-family: Cicle-strong;
+}

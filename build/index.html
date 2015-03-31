@@ -1,12 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Hello From Html</title>
+    <meta charset="UTF-8">
+    <title>HelpOut</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="apple-touch-icon" sizes="57x57" href="img/site/helpout_57x57.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="img/site/helpout_72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="img/site/helpout_114x114.png"/>
+    <link rel="apple-touch-icon" sizes="144x144" href="img/site/helpout_144x144.png"/>
+    <link rel="icon" type="image/png" href="img/site/helpout_57x57.png">
+
 </head>
 <body data-ng-app="helpOut">
-  <a data-ng-if="loggedIn()" data-ng-href="/#/signin" data-ng-click="logOut()">Log Out</a>
-  <main data-ng-view></main>
-  <script src="bundle.js"></script>
+    <header class="logo">
+        <a href="index.html"><h1 class="title">HelpOut</h1></a>
+    </header>
+    <nav class="nav">
+        <ul>
+            <li><a href="browse.html">Browse</a></li>
+            <li><a href="/#/maps">Maps</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    <a data-ng-if="!loggedIn()" data-ng-href="/#/signin">Sign In</a>
+    <a data-ng-if="loggedIn()" data-ng-click="logOut()">Log Out</a>
+    </nav>
+    
+    <main class="contain">
+        <section class="cf" data-ng-view>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="copyright">
+            <p>&copy;2015 HeloOut.com</p>
+
+            <p><a href="">Terms of use</a></p>
+        </div>
+        <div class="social">
+            <a href="http://www.facebook.com/chengzh2008"><img src="img/site/facebook.png"></a>
+            <a href="http://www.twitter.com/@chengzh2008"><img src="img/site/twitter.png"></a>
+            <a href="http://www.linkedin.com/in/zhihongcheng"><img src="img/site/li.png"></a>
+            <a href="mailto:chengzh2008@gmail.com"><img src="img/site/mail.png"></a>
+
+        </div>
+    </footer>
+    <script src="bundle.js"></script>
 </body>
 </html>
+

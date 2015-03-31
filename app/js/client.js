@@ -38,12 +38,12 @@ helpOut.config(['$routeProvider', function ($routeProvider) {
             templateUrl: 'templates/users/signup.html',
             controller: 'signupController'
         })
-        .when('/', {
-            redirectTo: '/signin'
-        })
         .when('/signin', {
             templateUrl: 'templates/users/signin.html',
             controller: 'signinController'
+        })
+        .when('/', {
+            templateUrl: 'templates/landing_page.html'
         })
         .otherwise({
             templateUrl: 'templates/four_oh_four.html'
