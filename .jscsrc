@@ -10,7 +10,7 @@
     "disallowKeywords": ["with"],
     "disallowSpacesInsideObjectBrackets": null,
     "disallowImplicitTypeConversion": ["string"],
-
+    "disallowDanglingUnderscores": { "allExcept": ["_id", "__v"] },
     "excludeFiles": [
         "test/data/**"
     ]

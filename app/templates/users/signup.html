@@ -1,0 +1,15 @@
+<section data-ng-controller="signupController">
+  <a data-ng-href="/#/signin">Sign in to existing user</a>
+  <h1>Create New User</h1>
+  <form name="signupform">
+    <label for="email">email</label>
+    <input id="email" type="text" required data-ng-model="newUser.basic.email">
+    <label for="password">password</label>
+    <input id="password" type="password" required data-ng-model="newUser.basic.password">
+    <label for="volunteer">Volunteer</label>
+    <input type="radio" id="volunteer" name="role" ng-model="newUser.role" value="volunteer">
+    <label for="organizer">Organizer</label>
+    <input type="radio" id="organizer" name="role" ng-model="newUser.role" value="organizer">
+    <button data-ng-disabled="!signupform.$valid" data-ng-click="createNewUser()">Create User</button>
+  </form>
+</section>

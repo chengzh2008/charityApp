@@ -37,8 +37,7 @@ module.exports = {
         app.use('/api/v1', volunteerRouter);
         app.use('/api/v1', eventRouter);
         app.use('/api/v1', imageRouter);
-        app.use(express.static(path.join(__dirname, 'public')));
-
+        app.use(express.static(path.join(__dirname, 'build')));
         app.listen(process.env.PORT || 3000, function () {
             console.log('Server is running on port ' + (process.env.PORT || 3000));
         });

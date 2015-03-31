@@ -1,0 +1,11 @@
+<section>
+  <a data-ng-href="/#/signup">Create a new user</a>
+  <form name="signinform">
+    <label for="username">Username</label>
+    <input type="text" required id="username" data-ng-model="login.username">
+    <label for="password">Password</label>
+    <input type="password" required id="password" data-ng-model="login.password">
+
+    <button data-ng-click="signIn()" data-ng-disabled="!signinform.$valid">Sign in</button>
+  </form>
+</section>

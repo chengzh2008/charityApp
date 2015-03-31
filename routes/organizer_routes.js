@@ -12,11 +12,14 @@ module.exports = function (router, appSecret) {
     router.use(logger());
 
     router.get('/organizers/:id', eatAuth(appSecret), function (req, res) {
-        if (req.user.basic.email !== req.params.id) {
+        if (req.user._id != req.params.id) {
+            console.log('testing...findOne');
             return res.status(500).send({'msg': 'unauthorized request'});
         }
-        Organizer.findOne({email: req.params.id}, function (err, organizer) {
+        Organizer.findOne({email: req.user.basic.email}, function (err, organizer) {
             if (err) {
+                console.log('testing...findOne');
+
                 return res.status(500).send({'msg': 'Could not find organizers'});
             }
             res.json(organizer);
@@ -25,10 +28,10 @@ module.exports = function (router, appSecret) {
 
     router.put('/organizers/:id', eatAuth(appSecret), function (req, res) {
         var updatedOrganizer = req.body;
-        if (req.user.basic.email !== req.params.id) {
+        if (req.user._id != req.params.id) {
             return res.status(500).send({'msg': 'unauthorized request'});
         }
-        Organizer.update({email: req.params.id}, updatedOrganizer, function (err, result) {
+        Organizer.update({email: req.user.basic.email}, updatedOrganizer, function (err, result) {
             if (err) {
                 return res.status(500).send({'msg': 'Could not find organizers'});
             }
@@ -37,10 +40,10 @@ module.exports = function (router, appSecret) {
     });
 
     router.delete('/organizers/:id', eatAuth(appSecret), function (req, res) {
-        if (req.user.basic.email !== req.params.id) {
+        if (req.user._id != req.params.id) {
             return res.status(500).send({'msg': 'unauthorized request'});
         }
-        Organizer.remove({email: req.params.id}, function (err, result) {
+        Organizer.remove({email: req.user.basic.email}, function (err, result) {
             if (err) {
                 return res.status(500).send({'msg': 'Could not find organizers'});
             }

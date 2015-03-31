@@ -40,15 +40,20 @@ function getSignedUser(UserType, req, res, token) {
         if (err) {
             return res.status(500).send({msg: 'can not login user'});
         }
+        console.log('after signin', profileInfo);
+        console.log('after signin', req.user._id);
+        console.log('after signin token', token);
+
         res.json({
             token: token,
+            userId: req.user._id,
             profileInfo: profileInfo
         });
     });
 }
 
 function processUser(UserType, req, res, appSecret) {
-    console.log('the info from request body....', req.body);
+    //console.log('the info from request body....', req.body);
     var newUser = new User(req.body.credential);
 
     User.findOne({'basic.email': newUser.basic.email}, function (err, result) {
@@ -67,7 +72,12 @@ function processUser(UserType, req, res, appSecret) {
                 if (err) {
                     return res.status(500).send({msg: 'can not generate token'});
                 }
-
+                if(!req.body.profileInfo) {
+                    req.body.profileInfo = {
+                        email: user.basic.email,
+                        role: user.role
+                    }
+                }
                 var newUserProfile = new UserType(req.body.profileInfo);
                 newUserProfile.save(function (err, profile) {
                     if (err) {
@@ -75,6 +85,7 @@ function processUser(UserType, req, res, appSecret) {
                     }
                     res.json({
                         token: token,
+                        userId: user._id,
                         profileInfo: profile
                     });
                 });
