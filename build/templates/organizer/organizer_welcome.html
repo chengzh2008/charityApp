@@ -1,4 +1,5 @@
 <section data-ng-controller="organizerController" data-ng-init="getByUserId()">
+
     <h2>Welcome onboard: {{currentUser.profileInfo.orgName}}</h2>
 
     <div class="contain">
@@ -18,7 +19,7 @@
                 <div class="list-group">
 
                     <div class="list-group-item">
-                        <img src="{{currentUser.profileInfo.imgUrl}}" class="fa fa-2x fa-building-o pull-left"></img>
+                        <img src="{{currentUser.profileInfo.imgUrl}}" class="fa fa-2x fa-building-o pull-left"/>
                         <label>Name</label>
                         <h4 class="list-group-item-heading">{{currentUser.profileInfo.orgName}}</h4>
                     </div>
@@ -42,7 +43,7 @@
                     <div class="list-group-item">
                         <label>Mission</label>
 
-                        <p class="list-group-item-heading">{{currentUser.profileInfo.email}}</textarea>
+                        <p class="list-group-item-heading">{{currentUser.profileInfo.mission}}</p>
                     </div>
 
                     <div class="list-group-item">

@@ -80,13 +80,9 @@ module.exports = function (app) {
                 });
         };
 
-
         $scope.edit = function (organizer) {
-            console.log(' update profile...method call');
-
             ApiService.Organizer.edit($routeParams.userId, organizer)
                 .success(function (data) {
-                    console.log('data from server', data);
                     $scope.edittingProfile = false;
                     $scope.currentUser.profileInfo = data;
                 })
@@ -98,7 +94,6 @@ module.exports = function (app) {
         $scope.cancel = function () {
             $scope.toggleEditProfile();
             $scope.getByUserId();
-            //$location.path('/organizer/' + data.userId);
         };
 
         $scope.toggleEditProfile = function () {
