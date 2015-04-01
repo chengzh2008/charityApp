@@ -1,8 +1,15 @@
 body {
-  padding-top: 20px; }
+  padding-top: 20px;
+  background-color: #797979; }
 
 .landing {
   text-align: center; }
+
+.navbar-header a {
+  font-size: 24px; }
+
+.navbar li:hover {
+  background-color: #797979; }
 
 footer {
   padding-top: 30px; }

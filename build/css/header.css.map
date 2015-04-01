@@ -1,7 +1,7 @@
 {
 "version": 3,
-"mappings": "",
-"sources": [],
+"mappings": "AAEA,gBAAiB;EACf,SAAS,EAAE,IAAI;;AAIf,gBAAQ;EACN,gBAAgB,EART,OAAO",
+"sources": ["../../app/css/header.scss"],
 "names": [],
 "file": "header.css"
 }

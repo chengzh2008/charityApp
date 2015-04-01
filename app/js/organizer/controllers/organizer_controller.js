@@ -34,6 +34,11 @@ module.exports = function (app) {
                 });
         };
 
+        $scope.cancel = function () {
+            $scope.toggleEditProfile();
+            $scope.getByUserId();
+            //$location.path('/organizer/' + data.userId);
+        };
 
         $scope.toggleEditProfile = function () {
             $scope.edittingProfile = !$scope.edittingProfile
