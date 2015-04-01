@@ -1,66 +1,16 @@
-html, body, div, span,
-h1, h2, h3, h4, h5, h6, p, blockquote,
-a, em, img, strong,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, section {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
-  text-decoration: none; }
-
-html {
-  font: 16px Helvetica, sans-serif;
-  color: #333;
-  margin: 0 0 0 0;
-  background-color: blue; }
-
 body {
-  margin: auto;
-  width: 80%; }
+  padding-top: 20px; }
 
 .landing {
-  width: 80%;
-  background-color: #00e600;
-  height: 300px; }
+  text-align: center; }
 
-.logo {
-  font-size: 2em;
-  padding: 20px; }
-
-.nav ul {
-  width: 50%; }
-  .nav ul li {
-    float: left;
-    display: inline;
-    padding: 15px; }
-
-.login {
-  width: 20%;
-  float: right;
-  padding: 20px; }
-
-.contain {
-  clear: both; }
-
-footer .copyright {
-  font-size: 1.5em;
-  width: 40%;
-  float: left;
-  padding: 20px; }
-footer .social {
-  width: 40%;
-  float: right;
-  padding: 10px; }
-footer img {
-  float: right;
-  width: 50px;
-  height: 50px; }
+footer {
+  padding-top: 30px; }
+  footer img {
+    width: 100px;
+    height: 100px; }
+  footer .social img {
+    width: 10%;
+    height: 10%; }
 
 /*# sourceMappingURL=main.css.map */

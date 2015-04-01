@@ -1,15 +1,10 @@
-footer .copyright {
-  font-size: 1.5em;
-  width: 40%;
-  float: left;
-  padding: 20px; }
-footer .social {
-  width: 40%;
-  float: right;
-  padding: 10px; }
-footer img {
-  float: right;
-  width: 50px;
-  height: 50px; }
+footer {
+  padding-top: 30px; }
+  footer img {
+    width: 100px;
+    height: 100px; }
+  footer .social img {
+    width: 10%;
+    height: 10%; }
 
 /*# sourceMappingURL=footer.css.map */
