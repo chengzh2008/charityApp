@@ -1,15 +1,22 @@
-<section data-ng-controller="signupController">
-  <a data-ng-href="/#/signin">Sign in to existing user</a>
-  <h1>Create New User</h1>
-  <form name="signupform">
-    <label for="email">email</label>
-    <input id="email" type="text" required data-ng-model="newUser.basic.email">
-    <label for="password">password</label>
-    <input id="password" type="password" required data-ng-model="newUser.basic.password">
-    <label for="volunteer">Volunteer</label>
-    <input type="radio" id="volunteer" name="role" ng-model="newUser.role" value="volunteer">
-    <label for="organizer">Organizer</label>
-    <input type="radio" id="organizer" name="role" ng-model="newUser.role" value="organizer">
-    <button data-ng-disabled="!signupform.$valid" data-ng-click="createNewUser()">Create User</button>
-  </form>
+<section class="container" data-ng-controller="signupController">
+    <a data-ng-href="/#/signin">Sign in to existing user</a>
+
+    <form class="form-sigin">
+        <h2 class="form-signin-heading">Create New User</h2>
+
+        <label for="email" class="sr-only">email</label>
+        <input id="email" class="form-control" type="email" placeholder="Email address" required
+               data-ng-model="newUser.basic.email">
+        <label for="password" class="sr-only">password</label>
+        <input id="password" class="form-control" type="password" placeholder="Password" required data-ng-model="newUser.basic.password">
+
+        <div class="input-group-addon">
+                <label for="volunteer">Volunteer</label>
+                <input type="radio" id="volunteer" name="role" ng-model="newUser.role" value="volunteer">
+                <label for="organizer">Organizer</label>
+                <input type="radio" id="organizer" name="role" ng-model="newUser.role" value="organizer">
+        </div>
+        <!-- /input-group -->
+        <button class="btn btn-lg btn-primary btn-block" data-ng-disabled="!signupform.$valid" data-ng-click="createNewUser()">Create User</button>
+    </form>
 </section>
