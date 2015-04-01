@@ -1,3 +1,7 @@
+.navbar-header a {
+  font-size: 24px; }
 
+.navbar li:hover {
+  background-color: #797979; }
 
 /*# sourceMappingURL=header.css.map */

@@ -1,7 +1,11 @@
 @import '../../bourbon/bourbon';
 
+$bg-color: #797979;
+
+
 body {
   padding-top: 20px;
+  background-color: $bg-color;
 }
 
 @import 'landing';

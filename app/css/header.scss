@@ -1,0 +1,11 @@
+$bg-color: #797979;
+
+.navbar-header a {
+  font-size: 24px;
+}
+
+.navbar li {
+  &:hover {
+    background-color: $bg-color;
+  }
+}

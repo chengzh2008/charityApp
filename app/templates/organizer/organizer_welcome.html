@@ -1,25 +1,82 @@
 <section data-ng-controller="organizerController" data-ng-init="getByUserId()">
-    <h1>Welcome onboard: {{currentUser.profileInfo.orgName}}</h1>
+    <h2>Welcome onboard: {{currentUser.profileInfo.orgName}}</h2>
 
-    <h2>This the profile:</h2>
+    <div class="contain">
+        <div class="row">
+            <div data-edit-profile-directive data-ng-if="edittingProfile"></div>
+            <div class="panel panel-default" data-ng-if="!edittingProfile">
 
-    <img src="{{currentUser.profileInfo.imgUrl}}" alt="picture"/>
-    <button data-ng-click="toggleEditProfile()" id="edittingProfile">Edit Profile</button>
-    <ul data-ng-if="!edittingProfile">
-        <li><label>Email: </label> {{currentUser.profileInfo.email}}</li>
-        <li><label>Type: </label> {{currentUser.profileInfo.role}}</li>
-        <li><label>Name: </label> {{currentUser.profileInfo.orgName}}</li>
-        <li><label>Avatar url: </label> {{currentUser.profileInfo.imgUrl}}</li>
-        <li><label>Contact firstname: </label> {{currentUser.profileInfo.firstname}}</li>
-        <li><label>Contact lastname: </label> {{currentUser.profileInfo.lastname}}</li>
-        <li><label>Mission: </label> {{currentUser.profileInfo.mission}}</li>
-        <li><label>Address: </label> {{currentUser.profileInfo.address}}</li>
-        <li><label>City: </label> {{currentUser.profileInfo.city}}</li>
-        <li><label>Phone: </label> {{currentUser.profileInfo.phone}}</li>
-        <li><label>Website: </label> {{currentUser.profileInfo.website}}</li>
-        <li><label>Joined since: </label> {{currentUser.profileInfo.createdSince}}</li>
-    </ul>
-    <div data-edit-profile-directive data-ng-if="edittingProfile"></div>
+                <div class="panel-heading clearfix">
+
+                    <h2 class="panel-title pull-left">Profile Details</h2>
+                    <button class="btn btn-primary pull-right" data-ng-click="toggleEditProfile()" id="edittingProfile">
+                        Edit Profile
+                    </button>
+
+                </div>
+
+                <div class="list-group">
+
+                    <div class="list-group-item">
+                        <img src="{{currentUser.profileInfo.imgUrl}}" class="fa fa-2x fa-building-o pull-left"></img>
+                        <label>Name</label>
+                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.orgName}}</h4>
+                    </div>
+
+                    <div class="list-group-item">
+                        <label>Contact person</label>
+                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.firstname +
+                            currentUser.profileInfo.lastname}}</h4>
+                    </div>
+
+                    <a class="list-group-item" href="mailto:{{currentUser.profileInfo.email}}">
+                        <label>Email</label>
+                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.email}}</h4>
+                    </a>
+
+                    <div class="list-group-item">
+                        <label>Type</label>
+                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.role}}</h4>
+                    </div>
+
+                    <div class="list-group-item">
+                        <label>Mission</label>
+
+                        <p class="list-group-item-heading">{{currentUser.profileInfo.email}}</textarea>
+                    </div>
+
+                    <div class="list-group-item">
+                        <label>Address</label>
+                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.address}}</h4>
+                    </div>
+
+                    <div class="list-group-item">
+                        <label>City</label>
+                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.city}}</h4>
+                    </div>
+
+                    <div class="list-group-item">
+                        <label>Phone</label>
+                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.phone}}</h4>
+                    </div>
+
+                    <a class="list-group-item">
+                        <label>Website</label>
+                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.website}}</h4>
+                    </a>
+
+                    <div class="list-group-item">
+                        <label>Joined since</label>
+                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.createdSince}}</h4>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
 
 </section>
 
