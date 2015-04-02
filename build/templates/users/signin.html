@@ -1,10 +1,33 @@
 <section class="container">
-  <form name="signinform" class="form-signin">
-    <h2 class="form-signin-heading">Please sign in</h2>
-    <label for="username" class="sr-only">Email address</label>
-    <input type="email" class="form-control" required id="username" placeholder="Email address" autofocus data-ng-model="login.username">
-    <label for="password" class="sr-only">Password</label>
-    <input type="password" required class="form-control" placeholder="Password" id="password" data-ng-model="login.password">
-    <button class="btn btn-lg btn-primary btn-block" data-ng-click="signIn()" data-ng-disabled="!signinform.$valid">Sign in</button>
-  </form>
+
+  <div class="panel panel-default">
+    <div class="panel-heading clearfix">
+      <h2 class="panel-title pull-left">Please sign in</h2>
+      <div class="btn-group pull-right">
+        <button class="btn btn-success" data-ng-click="signIn()" data-ng-disabled="!signinform.$valid">
+          <i class="fa fa-check"></i>
+          Sign in
+        </button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <form name="signinform" class="form-horizontal">
+        <div class="form-group">
+          <label class="col-xs-3 control-label">Email</label>
+          <div class="col-xs-9">
+            <input type="email" class="form-control" required id="username" placeholder="Email address" autofocus data-ng-model="login.username">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-3 control-label">Password</label>
+          <div class="col-xs-9">
+            <input type="password" class="form-control" required placeholder="Password" id="password" data-ng-model="login.password">
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+
 </section>
