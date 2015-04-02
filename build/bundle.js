@@ -302,9 +302,12 @@ module.exports = function (app) {
                 .success(function (data) {
                     $cookies.token = data.token;
                     $rootScope.currentUser = {
+                        userId: data.userId,
+                        userRole: data.userRole,
                         profileInfo: data.profileInfo
                     };
-                    $location.path('/organizer/' + data.userId);
+                    alert(data.userRole);
+                    $location.path('/' + data.userRole + '/' + data.userId);
                 });
         };
     }]);
@@ -332,12 +335,7 @@ module.exports = function (app) {
                 })
                 .success(function (data) {
                     $cookies.token = data.token;
-
-                    if (role === 'volunteer') {
-                        $location.path('/volunteer/' + data.userId);
-                    } else {
-                        $location.path('/organizer/' + data.userId);
-                    }
+                    $location.path('/' + data.userRole + '/' + data.userId);
                 });
         };
     }]);

@@ -55,10 +55,10 @@
 
 <main class="container">
     <div class="row">
-        <ul class="nav nav-tabs data-ng-if="loggedIn()"" >
-            <li role="presentation" class="active"><a href="#">Home</a></li>
-            <li role="presentation"><a href="#">Profile</a></li>
-            <li role="presentation"><a href="#">Messages</a></li>
+        <ul class="nav nav-tabs" data-ng-if="loggedIn()">
+            <li role="presentation" class="active"><a href="/#/{{currentUser.userRole}}/{{currentUser.userId}}">Profile</a></li>
+            <li role="presentation"><a href="/#/events/{{currentUser.userId}}">Events</a></li>
+            <li role="presentation"><a href="/#/messages/{{currentUser.userRole}}/{{currentUser.userId}}">Messages</a></li>
         </ul>
         <section data-ng-view>
         </section>

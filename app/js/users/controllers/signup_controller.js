@@ -19,12 +19,7 @@ module.exports = function (app) {
                 })
                 .success(function (data) {
                     $cookies.token = data.token;
-
-                    if (role === 'volunteer') {
-                        $location.path('/volunteer/' + data.userId);
-                    } else {
-                        $location.path('/organizer/' + data.userId);
-                    }
+                    $location.path('/' + data.userRole + '/' + data.userId);
                 });
         };
     }]);
