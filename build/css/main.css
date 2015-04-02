@@ -1,6 +1,6 @@
 body {
   padding-top: 20px;
-  background-color: #797979; }
+  background-color: rgba(200, 100, 0, 0.8); }
 
 .landing {
   text-align: center; }
@@ -9,7 +9,7 @@ body {
   font-size: 24px; }
 
 .navbar li:hover {
-  background-color: #797979; }
+  background-color: rgba(100, 150, 255, 0.8); }
 
 footer {
   padding-top: 30px; }

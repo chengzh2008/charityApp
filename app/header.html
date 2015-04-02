@@ -28,7 +28,7 @@
 
 
             </li>
-            <li><a href="/#/signup">Sign up</a></li>
+            <li><a href="/#/signup" data-ng-if="!loggedIn()">Sign up</a></li>
             <li><a href="/#/signin" data-ng-if="!loggedIn()">Sign in</a></li>
             <li><a href="/#/" data-ng-if="loggedIn()" data-ng-click="logOut()">Logout</a></li>
         </ul>
