@@ -306,7 +306,6 @@ module.exports = function (app) {
                         userRole: data.userRole,
                         profileInfo: data.profileInfo
                     };
-                    alert(data.userRole);
                     $location.path('/' + data.userRole + '/' + data.userId);
                 });
         };
