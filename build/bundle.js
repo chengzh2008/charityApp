@@ -80,13 +80,9 @@ module.exports = function (app) {
                 });
         };
 
-
         $scope.edit = function (organizer) {
-            console.log(' update profile...method call');
-
             ApiService.Organizer.edit($routeParams.userId, organizer)
                 .success(function (data) {
-                    console.log('data from server', data);
                     $scope.edittingProfile = false;
                     $scope.currentUser.profileInfo = data;
                 })
@@ -98,7 +94,6 @@ module.exports = function (app) {
         $scope.cancel = function () {
             $scope.toggleEditProfile();
             $scope.getByUserId();
-            //$location.path('/organizer/' + data.userId);
         };
 
         $scope.toggleEditProfile = function () {
@@ -307,9 +302,11 @@ module.exports = function (app) {
                 .success(function (data) {
                     $cookies.token = data.token;
                     $rootScope.currentUser = {
+                        userId: data.userId,
+                        userRole: data.userRole,
                         profileInfo: data.profileInfo
                     };
-                    $location.path('/organizer/' + data.userId);
+                    $location.path('/' + data.userRole + '/' + data.userId);
                 });
         };
     }]);
@@ -337,12 +334,7 @@ module.exports = function (app) {
                 })
                 .success(function (data) {
                     $cookies.token = data.token;
-
-                    if (role === 'volunteer') {
-                        $location.path('/volunteer/' + data.userId);
-                    } else {
-                        $location.path('/organizer/' + data.userId);
-                    }
+                    $location.path('/' + data.userRole + '/' + data.userId);
                 });
         };
     }]);

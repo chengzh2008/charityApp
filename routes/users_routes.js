@@ -42,11 +42,13 @@ function getSignedUser(UserType, req, res, token) {
         }
         console.log('after signin', profileInfo);
         console.log('after signin', req.user._id);
+        console.log('after signin', req.user.role);
         console.log('after signin token', token);
 
         res.json({
             token: token,
             userId: req.user._id,
+            userRole: req.user.role,
             profileInfo: profileInfo
         });
     });
@@ -86,6 +88,7 @@ function processUser(UserType, req, res, appSecret) {
                     res.json({
                         token: token,
                         userId: user._id,
+                        userRole: user.role,
                         profileInfo: profile
                     });
                 });
