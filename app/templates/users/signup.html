@@ -1,22 +1,46 @@
 <section class="container" data-ng-controller="signupController">
-    <a data-ng-href="/#/signin">Sign in to existing user</a>
 
-    <form name="signupform" class="form-sigin">
-        <h2 class="form-signin-heading">Create New User</h2>
+    <div class="panel panel-default">
+        <div class="panel-heading clearfix">
+            <h2 class="panel-title pull-left">Please Sign Up</h2>
 
-        <label for="email" class="sr-only">email</label>
-        <input id="email" class="form-control" type="email" placeholder="Email address" required
-               data-ng-model="newUser.basic.email">
-        <label for="password" class="sr-only">password</label>
-        <input id="password" class="form-control" type="password" placeholder="Password" required data-ng-model="newUser.basic.password">
-
-        <div class="input-group-addon">
-                <label for="volunteer">Volunteer</label>
-                <input type="radio" id="volunteer" name="role" ng-model="newUser.role" value="volunteer">
-                <label for="organizer">Organizer</label>
-                <input type="radio" id="organizer" name="role" ng-model="newUser.role" value="organizer">
+            <div class="btn-group pull-right">
+                <button class="btn btn-success" data-ng-disabled="!signupform.$valid" data-ng-click="createNewUser()">
+                    <i class="fa fa-check"></i>
+                    Create User
+                </button>
+            </div>
         </div>
-        <!-- /input-group -->
-        <button class="btn btn-lg btn-primary btn-block" data-ng-disabled="!signupform.$valid" data-ng-click="createNewUser()">Create User</button>
-    </form>
+        <div class="modal-body">
+            <form name="signupform" class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">Email</label>
+
+                    <div class="col-xs-9">
+                        <input type="email" class="form-control" required id="username" placeholder="Email address"
+                               autofocus data-ng-model="newUser.basic.email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">Password</label>
+
+                    <div class="col-xs-9">
+                        <input type="password" class="form-control" required placeholder="Password" id="password"
+                               data-ng-model="newUser.basic.password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group-addon">
+                        <label for="volunteer">Volunteer</label>
+                        <input type="radio" id="volunteer" name="role" ng-model="newUser.role" value="volunteer">
+                        <label for="organizer">Organizer</label>
+                        <input type="radio" id="organizer" name="role" ng-model="newUser.role" value="organizer">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+
 </section>
