@@ -16,42 +16,7 @@
 
 </head>
 <body data-ng-app="helpOut">
-<div class="navbar navbar-default navbar-static-top">
-    <div class="container">
-        <div class="navbar-header">
-
-            <a class="navbar-brand" href="/#/">HelpOut</a>
-            <button type="button" class="navbar-toggle"
-                    data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-
-        </div>
-        <ul class="nav navbar-nav navbar-right collapse navbar-collapse">
-            <li><a href="/#/">Home</a></li>
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">About <span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="/#/about">Out story</a></li>
-                    <li><a href="/#/contact">Contact us</a></li>
-                    <li class="divider"></li>
-                    <li><a href="http://www.twitter.com/@chengzh2008">Tweeter</a></li>
-                    <li><a href="http://www.linkedin.com/in/zhihongcheng">LinedIn</a></li>
-                </ul>
-
-
-
-
-            </li>
-            <li><a href="/#/signup">Sign up</a></li>
-            <li><a href="/#/signin" data-ng-if="!loggedIn()">Sign in</a></li>
-            <li><a href="/#/" data-ng-if="loggedIn()" data-ng-click="logOut()">Logout</a></li>
-        </ul>
-    </div>
-</div>
+<div ng-include src="'header.html'"></div>
 
 <main class="container">
     <div class="row">
@@ -65,34 +30,7 @@
 
     </div>
 </main>
-<footer class="container footer">
-
-        <div class="row">
-            <a href="https://nodejs.org"><img src="img/site/nodejs-logo.png" alt="NodeJs"/></a></li>
-            <a href="https://nodejs.org"><img src="img/site/nodejs-logo.png" alt="NodeJs"/></a></li>
-            <a href="http://expressjs.com"><img src="img/site/express.png" alt="NodeJs"/></a></li>
-            <a href="http://https://www.mongodb.org"><img src="img/site/mongodb.png" alt="NodeJs"/></a></li>
-
-        </div>
-
-        <div class="row">
-
-            <div class="copyright col-xs-6">
-                <p>&copy;2015 HelpOut.com</p>
-
-                <p><a href="">Terms of use</a></p>
-            </div>
-            <div class="social col-xs-6">
-                <a href="http://www.facebook.com/chengzh2008"><img src="img/site/facebook.png"></a>
-                <a href="http://www.twitter.com/@chengzh2008"><img src="img/site/twitter.png"></a>
-                <a href="http://www.linkedin.com/in/zhihongcheng"><img src="img/site/li.png"></a>
-                <a href="mailto:chengzh2008@gmail.com"><img src="img/site/mail.png"></a>
-            </div>
-
-        </div>
-
-
-</footer>
+<div ng-include src="'footer.html'"></div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootcards/1.0.0/js/bootcards.min.js"></script>
