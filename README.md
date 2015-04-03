@@ -1,10 +1,10 @@
 
 # charityApp [![Build Status](https://travis-ci.org/chengzh2008/charityApp.svg?branch=heroku)](https://travis-ci.org/chengzh2008/charityApp)
 
-Created by Melissa, Zhihong (back-end team) and Annemarie, David and Clint (iOS team). Great collaboration!
+Created by Melissa, Zhihong (back-end team).
 
-## A restful web service for iOS app:
-An app for organizer and volunteer to find each other easier. For this app, there are two types of users: volunteer and organizer. Organizer can create events. User can search for events match their interest and skills. User can post messages regarding a particular event and organizer can response it (Not implemented yet).
+## A web application:
+An app for organizer and volunteer to find each other easier. For this app, there are two types of users: volunteer and organizer. Organizers can create events. Volunteers can search for events match their interest and skills. Volunteers can post messages regarding a particular event and organizer can response it.
 
 ## Stacks
 The server created using NodeJs/ExpressJs. Authentication is done by passport basic strategy. Testing is done with Mocha/Chai-http framework. 

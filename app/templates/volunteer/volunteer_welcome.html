@@ -1,0 +1,82 @@
+<section data-ng-controller="volunteerController" data-ng-init="getByUserId()">
+
+    <h2>Welcome onboard: {{currentUser.profileInfo.orgName}}</h2>
+
+    <div class="contain">
+        <div class="row">
+            <div data-edit-profile-directive data-ng-if="edittingProfile"></div>
+            <div class="panel panel-default" data-ng-if="!edittingProfile">
+
+                <div class="panel-heading clearfix">
+
+                    <h2 class="panel-title pull-left">Profile Details</h2>
+                    <button class="btn btn-primary pull-right" data-ng-click="toggleEditProfile()" id="edittingProfile">
+                        Edit Profile
+                    </button>
+
+                </div>
+
+                <div class="list-group">
+
+                    <div class="list-group-item">
+                        <img src="{{currentUser.profileInfo.imgUrl}}" class="fa fa-2x fa-building-o pull-left"/>
+                        <label>Name</label>
+                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.orgName}}</h4>
+                    </div>
+
+                    <div class="list-group-item">
+                        <label>Contact person</label>
+                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.firstname + currentUser.profileInfo.lastname}}</h4>
+                    </div>
+
+                    <a class="list-group-item" href="mailto:{{currentUser.profileInfo.email}}">
+                        <label>Email</label>
+                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.email}}</h4>
+                    </a>
+
+                    <div class="list-group-item">
+                        <label>Type</label>
+                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.type}}</h4>
+                    </div>
+
+                    <div class="list-group-item">
+                        <label>Mission</label>
+
+                        <p class="list-group-item-heading">{{currentUser.profileInfo.mission}}</p>
+                    </div>
+
+                    <div class="list-group-item">
+                        <label>Address</label>
+                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.address}}</h4>
+                    </div>
+
+                    <div class="list-group-item">
+                        <label>City</label>
+                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.city}}</h4>
+                    </div>
+
+                    <div class="list-group-item">
+                        <label>Phone</label>
+                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.phone}}</h4>
+                    </div>
+
+                    <a class="list-group-item">
+                        <label>Website</label>
+                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.website}}</h4>
+                    </a>
+
+                    <div class="list-group-item">
+                        <label>Joined since</label>
+                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.createdSince}}</h4>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+</section>
+
