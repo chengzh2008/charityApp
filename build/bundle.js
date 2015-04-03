@@ -74,6 +74,7 @@ module.exports = function (app) {
         $scope.eventList = [];
         $scope.newEvent = {};
         $scope.edittingEvent = false;
+        $scope.addingEvent = false;
 
         $scope.getAll = function () {
             ApiService.Event.getEventsByOrganizerId($routeParams.profileId)
@@ -121,12 +122,17 @@ module.exports = function (app) {
         };
 
         $scope.cancel = function () {
-            $scope.toggleEditProfile();
-            $scope.getByUserId();
+            $scope.toggleAddEvent();
+            $scope.getEventsByOrganizerId();
         };
 
-        $scope.toggleEditProfile = function () {
-            $scope.edittingProfile = !$scope.edittingProfile
+        $scope.toggleEditEvent = function () {
+            $scope.edittingEvent = !$scope.edittingEvent;
+        };
+
+        $scope.toggleAddEvent = function () {
+            alert('testing....');
+            $scope.addingEvent = !$scope.addingEvent;
         };
 
     }]);
