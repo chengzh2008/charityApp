@@ -28,11 +28,15 @@ module.exports = function (app) {
                         return request(restUrl + '/organizers/' + userId, 'PUT', organizer);
                     }
                 },
-                Image: {
-                    getImageById: function (userId) {
-                        return request(restUrl + '/images/' + userId, 'GET');
+                Volunteer: {
+                    getByUserId: function (userId) {
+                        return request(restUrl + '/volunteers/' + userId, 'GET');
+                    },
+                    edit: function (userId, organizer) {
+                        return request(restUrl + '/volunteers/' + userId, 'PUT', organizer);
                     }
                 }
+
             };
         }]);
 };

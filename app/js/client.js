@@ -15,21 +15,25 @@ require('./services/api-service')(helpOut);
 
 //controllers
 require('./organizer/controllers/organizer_controller')(helpOut);
+require('./volunteer/controllers/volunteer_controller')(helpOut);
+
 
 //directives
 //require('./directives/dummy_directive')(helpOut);
 //require('./directives/create_resource_directive')(helpOut);
 require('./organizer/directives/edit_profile_directive')(helpOut);
+require('./volunteer/directives/edit_volunteer_profile_directive')(helpOut);
+
 
 helpOut.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
+        .when('/volunteer/:userId', {
+            templateUrl: 'templates/volunteer/volunteer_welcome.html',
+            controller: 'volunteerController'
+        })
         .when('/organizer/:userId', {
             templateUrl: 'templates/organizer/organizer_welcome.html',
             controller: 'organizerController'
-        })
-        .when('/volunteer/:useId', {
-            templateUrl: 'templates/volunteer/volunteer_template.html',
-            controller: 'volunteerController'
         })
         .when('/about', {
             templateUrl: 'templates/about.html'

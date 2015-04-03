@@ -13,13 +13,10 @@ module.exports = function (router, appSecret) {
 
     router.get('/organizers/:id', eatAuth(appSecret), function (req, res) {
         if (req.user._id != req.params.id) {
-            console.log('testing...findOne');
             return res.status(500).send({'msg': 'unauthorized request'});
         }
         Organizer.findOne({email: req.user.basic.email}, function (err, organizer) {
             if (err) {
-                console.log('testing...findOne');
-
                 return res.status(500).send({'msg': 'Could not find organizers'});
             }
             res.json(organizer);
