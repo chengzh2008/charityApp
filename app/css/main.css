@@ -26,4 +26,7 @@ footer {
 .ng-dirty.ng-invalid {
   border-color: #c7254e; }
 
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important; }
+
 /*# sourceMappingURL=main.css.map */
