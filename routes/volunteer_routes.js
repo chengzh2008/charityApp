@@ -9,31 +9,31 @@ module.exports = function (vol_router, appSecret) {
 
     // PUT - replace existing object
     vol_router.put('/volunteers/:id', eat_auth(appSecret), function (req, res) {
-        var updateVolunteer = req.body,
-            query = {'email': req.params.id};
-        if (req.user.basic.email !== req.params.id) {
+        console.log(req.params.id);
+        var updateVolunteer = req.body;
+        if (req.user._id != req.params.id) {
             return res.status(500).send({'msg': 'unauthorized request'});
         } else {
-            Volunteer.update(query, updateVolunteer, function (err) {
+            Volunteer.update({email: req.user.basic.email}, updateVolunteer, function (err) {
                 if (err) {
                     return res.status(500).send({'msg': 'could not save volunteer'});
                 }
-                res.json(req.body);
+                res.json(updateVolunteer);
             });
         }
     });
 
     // GET
     vol_router.get('/volunteers/:id', eat_auth(appSecret), function (req, res) {
-        var query = {'email': req.params.id};
-        if (req.user.basic.email !== req.params.id) {
+        console.log(req.params.id);
+        if (req.user._id != req.params.id) {
             return res.status(500).send({'msg': 'unauthorized request'});
         }
-        Volunteer.findOne(query, function (err, data) {
+        Volunteer.findOne({email: req.user.basic.email}, function (err, volunteer) {
             if (err) {
                 return res.status(500).send({'msg': 'could not retrieve volunteer'});
             }
-            res.json(data);
+            res.json(volunteer);
         });
     });
 

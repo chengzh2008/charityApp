@@ -7,6 +7,7 @@ module.exports = function (app) {
             $http.get('/api/v1/sign_in')
                 .error(function (data) {
                     console.log(data);
+                    $location.path('/');
                 })
                 .success(function (data) {
                     $cookies.token = data.token;
@@ -15,6 +16,7 @@ module.exports = function (app) {
                         userRole: data.userRole,
                         profileInfo: data.profileInfo
                     };
+                    console.log($rootScope.currentUser);
                     $location.path('/' + data.userRole + '/' + data.userId);
                 });
         };

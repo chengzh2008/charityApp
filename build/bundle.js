@@ -16,21 +16,25 @@ require('./services/api-service')(helpOut);
 
 //controllers
 require('./organizer/controllers/organizer_controller')(helpOut);
+require('./volunteer/controllers/volunteer_controller')(helpOut);
+
 
 //directives
 //require('./directives/dummy_directive')(helpOut);
 //require('./directives/create_resource_directive')(helpOut);
 require('./organizer/directives/edit_profile_directive')(helpOut);
+require('./volunteer/directives/edit_volunteer_profile_directive')(helpOut);
+
 
 helpOut.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
+        .when('/volunteer/:userId', {
+            templateUrl: 'templates/volunteer/volunteer_welcome.html',
+            controller: 'volunteerController'
+        })
         .when('/organizer/:userId', {
             templateUrl: 'templates/organizer/organizer_welcome.html',
             controller: 'organizerController'
-        })
-        .when('/volunteer/:useId', {
-            templateUrl: 'templates/volunteer/volunteer_template.html',
-            controller: 'volunteerController'
         })
         .when('/about', {
             templateUrl: 'templates/about.html'
@@ -51,7 +55,7 @@ helpOut.config(['$routeProvider', function ($routeProvider) {
         })
 }]);
 
-},{"./../../bower_components/angular-base64/angular-base64.js":13,"./../../bower_components/angular/angular":14,"./organizer/controllers/organizer_controller":3,"./organizer/directives/edit_profile_directive":5,"./services/api-service":6,"./services/resource_service":7,"./users/users":12,"angular-cookies":16,"angular-route":18}],2:[function(require,module,exports){
+},{"./../../bower_components/angular-base64/angular-base64.js":14,"./../../bower_components/angular/angular":15,"./organizer/controllers/organizer_controller":3,"./organizer/directives/edit_profile_directive":4,"./services/api-service":5,"./services/resource_service":6,"./users/users":11,"./volunteer/controllers/volunteer_controller":12,"./volunteer/directives/edit_volunteer_profile_directive":13,"angular-cookies":17,"angular-route":19}],2:[function(require,module,exports){
 'use strict';
 
 module.exports = function() {
@@ -107,19 +111,6 @@ module.exports = function (app) {
 'use strict';
 
 module.exports = function(app) {
-  app.directive('createNoteDirective', function() {
-    return {
-      restrict: 'A',
-      templateUrl: '/templates/notes/directives/create_note_directive.html',
-      replace: true
-    }
-  });
-};
-
-},{}],5:[function(require,module,exports){
-'use strict';
-
-module.exports = function(app) {
     app.directive('editProfileDirective', function() {
         return {
             restrict: 'A',
@@ -129,7 +120,7 @@ module.exports = function(app) {
     });
 };
 
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 module.exports = function (app) {
@@ -160,15 +151,19 @@ module.exports = function (app) {
                         return request(restUrl + '/organizers/' + userId, 'PUT', organizer);
                     }
                 },
-                Image: {
-                    getImageById: function (userId) {
-                        return request(restUrl + '/images/' + userId, 'GET');
+                Volunteer: {
+                    getByUserId: function (userId) {
+                        return request(restUrl + '/volunteers/' + userId, 'GET');
+                    },
+                    edit: function (userId, organizer) {
+                        return request(restUrl + '/volunteers/' + userId, 'PUT', organizer);
                     }
                 }
+
             };
         }]);
 };
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 module.exports = function(app) {
@@ -248,7 +243,7 @@ module.exports = function(app) {
   }]);
 };
 
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 module.exports = function (app) {
@@ -288,7 +283,7 @@ module.exports = function (app) {
 
 
 }
-},{}],9:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 module.exports = function (app) {
@@ -298,6 +293,7 @@ module.exports = function (app) {
             $http.get('/api/v1/sign_in')
                 .error(function (data) {
                     console.log(data);
+                    $location.path('/');
                 })
                 .success(function (data) {
                     $cookies.token = data.token;
@@ -306,13 +302,14 @@ module.exports = function (app) {
                         userRole: data.userRole,
                         profileInfo: data.profileInfo
                     };
+                    console.log($rootScope.currentUser);
                     $location.path('/' + data.userRole + '/' + data.userId);
                 });
         };
     }]);
 };
 
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 module.exports = function (app) {
@@ -340,7 +337,7 @@ module.exports = function (app) {
     }]);
 };
 
-},{}],11:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 module.exports = function(app) {
@@ -353,13 +350,14 @@ module.exports = function(app) {
     });
 };
 
-},{}],12:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 module.exports = function(app) {
   app.run(['$rootScope', '$cookies', '$location', function($rootScope, $cookies, $location) {
     $rootScope.logOut = function() {
       $cookies.token = '';
+      $location.path('/');
     };
 
     $rootScope.loggedIn = function() {
@@ -370,7 +368,66 @@ module.exports = function(app) {
   require('./controllers/signin_controller')(app);
 };
 
-},{"./controllers/signin_controller":9,"./controllers/signup_controller":10}],13:[function(require,module,exports){
+},{"./controllers/signin_controller":8,"./controllers/signup_controller":9}],12:[function(require,module,exports){
+'use strict';
+
+module.exports = function (app) {
+    app.controller('volunteerController', ['$scope', 'ApiService', '$cookies', '$location', '$routeParams', function ($scope, ApiService, $cookies, $location, $routeParams) {
+
+        if (!$cookies.token || $cookies.token.length < 1)
+            $location.path('/signup');
+
+
+        $scope.currentUser = {};
+        $scope.edittingProfile = false;
+
+        $scope.getByUserId = function () {
+            ApiService.Volunteer.getByUserId($routeParams.userId)
+                .success(function (data, status) {
+                    $scope.currentUser.profileInfo = data;
+                })
+                .error(function (data) {
+                    $location.path('/');
+                });
+        };
+
+        $scope.edit = function (volunteer) {
+            ApiService.Volunteer.edit($routeParams.userId, volunteer)
+                .success(function (data) {
+                    $scope.edittingProfile = false;
+                    $scope.currentUser.profileInfo = data;
+                })
+                .error(function () {
+                    $location.path('/');
+                });
+        };
+
+        $scope.cancel = function () {
+            $scope.toggleEditProfile();
+            $scope.getByUserId();
+        };
+
+        $scope.toggleEditProfile = function () {
+            $scope.edittingProfile = !$scope.edittingProfile
+        };
+
+    }]);
+};
+
+},{}],13:[function(require,module,exports){
+'use strict';
+
+module.exports = function(app) {
+    app.directive('editVolunteerProfileDirective', function() {
+        return {
+            restrict: 'A',
+            templateUrl: '/templates/volunteer/directives/edit_volunteer_profile_directive.html',
+            replace: true
+        }
+    });
+};
+
+},{}],14:[function(require,module,exports){
 (function() {
     'use strict';
 
@@ -538,7 +595,7 @@ module.exports = function(app) {
 
 })();
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 /**
  * @license AngularJS v1.3.15
  * (c) 2010-2014 Google, Inc. http://angularjs.org
@@ -26848,7 +26905,7 @@ var minlengthDirective = function() {
 })(window, document);
 
 !window.angular.$$csp() && window.angular.element(document).find('head').prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}</style>');
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 /**
  * @license AngularJS v1.3.15
  * (c) 2010-2014 Google, Inc. http://angularjs.org
@@ -27056,11 +27113,11 @@ angular.module('ngCookies', ['ng']).
 
 })(window, window.angular);
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 require('./angular-cookies');
 module.exports = 'ngCookies';
 
-},{"./angular-cookies":15}],17:[function(require,module,exports){
+},{"./angular-cookies":16}],18:[function(require,module,exports){
 /**
  * @license AngularJS v1.3.15
  * (c) 2010-2014 Google, Inc. http://angularjs.org
@@ -28051,8 +28108,8 @@ function ngViewFillContentFactory($compile, $controller, $route) {
 
 })(window, window.angular);
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 require('./angular-route');
 module.exports = 'ngRoute';
 
-},{"./angular-route":17}]},{},[1,2,3,4,5,6,7,8,9,10,11,12]);
+},{"./angular-route":18}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13]);

@@ -6,6 +6,7 @@ module.exports = function (app) {
         if (!$cookies.token || $cookies.token.length < 1)
             $location.path('/signup');
 
+
         $scope.currentUser = {};
         $scope.edittingProfile = false;
 
