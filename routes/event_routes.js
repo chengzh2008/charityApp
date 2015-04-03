@@ -22,7 +22,18 @@ module.exports = function (router, appSecret) {
     });
 
     router.get('/events', eatAuth(appSecret), function (req, res) {
+
         Event.find({}, function (err, data) {
+            if (err) {
+                return res.status(500).send({'msg': 'Could not find events'});
+            }
+            res.json(data);
+        });
+    });
+
+    router.get('/events/:profileId', eatAuth(appSecret), function (req, res) {
+
+        Event.find({organizerId: req.params.profileId}, function (err, data) {
             if (err) {
                 return res.status(500).send({'msg': 'Could not find events'});
             }
@@ -32,7 +43,7 @@ module.exports = function (router, appSecret) {
 
     router.put('/events/:id', eatAuth(appSecret), function (req, res) {
         var updatedEvent = req.body;
-        if (req.user.basic.email !== req.params.id) {
+        if (req.user.basic.email != req.params.id) {
             return res.status(500).send({'msg': 'unauthorized request'});
         }
         Event.update({organizerId: req.params.id}, updatedEvent, function (err, result) {
