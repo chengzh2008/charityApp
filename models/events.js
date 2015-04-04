@@ -5,15 +5,11 @@ var mongoose = require('mongoose'),
         organizerId: String,
         title: String,
         date: Date,
-        time: Date,
+        //time: Date,
         location: String,
         imgUrl: String,
         description: String,
-        volunteerJobs: [{
-            _id: false,
-            title: String,
-            skills: [String]
-        }],
+        skillsNeeded: String,
         messages: [{
             _id: false,
             username: String,

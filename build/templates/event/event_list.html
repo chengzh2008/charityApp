@@ -15,67 +15,31 @@
                 </div>
 
 
-                <div class="list-group">
+                <div class="modal-body">
+                    <form class="form-horizontal" ng-repeat="event in eventList">
+
+                        <div class="list-group-item">
+
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <img  src="{{event.imgUrl}}" class="fa fa-3x fa-building-o pull-left"/>
+                                    <h4 class="list-group-item-text">{{event.title}}</h4>
+                                    <h4 class="list-group-item-text">{{event.location}}</h4>
+                                </div>
+                                <div class="col-sm-6">
+                                    <h4 class="list-group-item-text">{{event.date.toDateString()}}</h4>
+                                    <h4 class="list-group-item-text">Need: {{event.skillsNeeded}}</h4>
+                                </div>
+                                <button class="btn btn-primary pull-right" data-ng-click="toggleShowEvent()">
+                                    Show
+                                </button>
+                            </div>
 
 
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <i class="fa fa-3x fa-building-o pull-left"></i>
-                            <h4 class="list-group-item-heading">Name</h4>
-
-                            <p class="list-group-item-text">City, Country</p>
                         </div>
-                        <div class="col-sm-6">
-                            <p class="list-group-item-text">Type</p>
+                            <div data-single-event-directive data-ng-if="showEvent"></div>
 
-                            <p class="list-group-item-text">Revenue</p>
-                        </div>
-                    </div>
-
-
-                    <div class="list-group-item">
-                    </div>
-                    <a class="list-group-item" href="mailto:{{currentUser.profileInfo.email}}">
-                        <label>Email</label>
-                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.email}}</h4>
-                    </a>
-
-                    <div class="list-group-item">
-                        <label>City</label>
-                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.city}}</h4>
-                    </div>
-
-                    <div class="list-group-item">
-                        <label>Bio</label>
-
-                        <p class="list-group-item-heading">{{currentUser.profileInfo.bio}}</p>
-                    </div>
-
-                    <div class="list-group-item">
-                        <label>What you care</label>
-                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.causes}}</h4>
-                    </div>
-
-                    <div class="list-group-item">
-                        <label>Good at</label>
-                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.skills}}</h4>
-                    </div>
-
-                    <div class="list-group-item">
-                        <label>Phone</label>
-                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.phone}}</h4>
-                    </div>
-
-                    <a class="list-group-item">
-                        <label>Home Page</label>
-                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.website}}</h4>
-                    </a>
-
-                    <div class="list-group-item">
-                        <label>Joined since</label>
-                        <h4 class="list-group-item-heading">{{currentUser.profileInfo.createdSince}}</h4>
-                    </div>
-
+                    </form>
                 </div>
 
             </div>

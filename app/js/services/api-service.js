@@ -40,8 +40,8 @@ module.exports = function (app) {
                     getEventsByOrganizerId: function (profileId) {
                         return request(restUrl + '/events/' + profileId, 'GET');
                     },
-                    save: function () {
-                        return request(restUrl + '/events/', 'POST');
+                    save: function (event) {
+                        return request(restUrl + '/events/', 'POST', event);
                     },
                     edit: function (eventId, event) {
                         return request(restUrl + '/events/' + eventId, 'PUT', event);

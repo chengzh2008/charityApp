@@ -10,49 +10,60 @@
         </div>
 
         <div class="btn-group pull-right">
-            <button class="btn btn-success" data-ng-click="edit(currentUser.profileInfo)">
+            <button class="btn btn-success" data-ng-click="addingEvent? save(newEvent) : edit()">
                 Save
             </button>
         </div>
 
-        <h3 class="modal-title">New Company</h3>
+        <h3 class="modal-title">New Event</h3>
 
         <div class="modal-body">
             <form class="form-horizontal">
 
                 <div class="form-group">
-                    <label class="col-xs-2 control-label">Name</label>
+                    <label class="col-xs-2 control-label">Title</label>
 
                     <div class="col-xs-10">
-                        <input type="text" name="name" class="form-control" placeholder="Company name">
+                        <input type="text" class="form-control" placeholder="Please enter title" data-ng-model="newEvent.title">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-xs-2 control-label">Type</label>
+                    <label class="col-xs-2 control-label">Location</label>
 
                     <div class="col-xs-10">
-                        <select name="type" class="form-control">
-                            <option value="" selected>Select a Type...</option>
-                            <option value="Prospect">Prospect</option>
-                            <option value="Customer">Customer</option>
-                        </select>
+                        <input type="text" class="form-control" placeholder="Please enter address" data-ng-model="newEvent.location">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-xs-2 control-label">Bio</label>
-
+                    <label class="col-xs-2 control-label">Date</label>
                     <div class="col-xs-10">
-                        <textarea class="form-control" rows="6" data-ng-model="currentUser.profileInfo.bio"></textarea>
+                        <input type="text" class="form-control" placeholder="MM/DD/YYYY" data-ng-model="newEvent.date">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-xs-2 control-label">Bio</label>
+                    <label class="col-xs-2 control-label">Image Url</label>
 
                     <div class="col-xs-10">
-                        <textarea class="form-control" rows="6" data-ng-model="currentUser.profileInfo.bio"></textarea>
+                        <input type="text" class="form-control" placeholder="www.example.com/picture.png" data-ng-model="newEvent.imgUrl">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">Description</label>
+
+                    <div class="col-xs-10">
+                        <textarea class="form-control" placeholder="Please enter description" data-ng-model="newEvent.description"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">Skills Needed</label>
+
+                    <div class="col-xs-10">
+                        <input type="text" class="form-control" placeholder="JavaScript, Management" data-ng-model="newEvent.skillsNeeded">
                     </div>
                 </div>
 
@@ -60,10 +71,10 @@
         </div>
 
 
-        <div class="modal-footer">
+        <div class="modal-footer" data-ng-if="!addingEvent">
             <button type="submit" class="btn btn-danger btn-block" data-ng-click="delete(currentUser.profileInfo)">
                 <i class="fa fa-trash-o"></i>
-                Delete Company
+                Delete Event
             </button>
         </div>
 

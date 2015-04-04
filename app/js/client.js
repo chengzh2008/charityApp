@@ -25,6 +25,7 @@ require('./event/controllers/event_controller')(helpOut);
 require('./organizer/directives/edit_profile_directive')(helpOut);
 require('./volunteer/directives/edit_volunteer_profile_directive')(helpOut);
 require('./event/directives/edit_event_directive')(helpOut);
+require('./event/directives/show_event_directive')(helpOut);
 
 
 
@@ -41,6 +42,9 @@ helpOut.config(['$routeProvider', function ($routeProvider) {
         .when('/event/:profileId', {
             templateUrl: 'templates/event/event_list.html',
             controller: 'eventController'
+        })
+        .when('/event/organizer/:eventIndex', {
+            templateUrl: '../templates/event/directives/single_event.html'
         })
         .when('/about', {
             templateUrl: 'templates/about.html'

@@ -10,6 +10,7 @@ module.exports = function (app) {
         $scope.newEvent = {};
         $scope.edittingEvent = false;
         $scope.addingEvent = false;
+        $scope.showEvent = false;
 
         $scope.getAll = function () {
             ApiService.Event.getEventsByOrganizerId($routeParams.profileId)
@@ -22,9 +23,11 @@ module.exports = function (app) {
         };
 
         $scope.save = function (event) {
-            ApiService.Event.save($routeParams.profileId, event)
+            event.organizerId = $routeParams.profileId;
+            ApiService.Event.save(event)
                 .success(function (data) {
-                    $scope.edittingProfile = false;
+                    console.log('after saved', data);
+                    $scope.addingEvent = false;
                     $scope.eventList.push(data);
                 })
                 .error(function () {
@@ -56,9 +59,9 @@ module.exports = function (app) {
                 });
         };
 
-        $scope.cancel = function () {
+        $scope.cancelAdd = function () {
             $scope.toggleAddEvent();
-            $scope.getEventsByOrganizerId();
+            //$scope.getEventsByOrganizerId();
         };
 
         $scope.toggleEditEvent = function () {
@@ -66,8 +69,11 @@ module.exports = function (app) {
         };
 
         $scope.toggleAddEvent = function () {
-            alert('testing....');
             $scope.addingEvent = !$scope.addingEvent;
+        };
+
+        $scope.toggleShowEvent = function () {
+            $scope.showEvent = !$scope.showEvent;
         };
 
     }]);

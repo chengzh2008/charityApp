@@ -13,6 +13,7 @@ module.exports = function (router, appSecret) {
 
     router.post('/events', eatAuth(appSecret), function (req, res) {
         var newEvent = new Event(req.body);
+        console.log('event object coming form the front', newEvent);
         newEvent.save(function (err, event) {
             if (err) {
                 return res.status(500).send({'msg': 'Could not save a blog'});
