@@ -1,0 +1,51 @@
+<section data-ng-controller="organizerEventListController" data-ng-init="getAll()">
+
+    <!--<h2>Welcome onboard: {{currentUser.profileInfo.name.firstname + ' ' + currentUser.profileInfo.name.lastname}}</h2>-->
+
+        <div data-edit-event-directive data-ng-if="addingEvent"></div>
+    <div class="contain">
+            <div class="panel panel-default">
+
+                <div class="panel-heading clearfix">
+
+                    <h2 class="panel-title pull-left">Your Event List</h2>
+                    <button class="btn btn-primary pull-right" data-ng-click="toggleAddEvent()">
+                        Add Event
+                    </button>
+                </div>
+
+
+                <div class="modal-body">
+                    <form class="form-horizontal" ng-repeat="event in eventList">
+
+                        <div class="list-group-item">
+
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <img  src="{{event.imgUrl}}" class="fa fa-3x fa-building-o pull-left"/>
+                                    <h4 class="list-group-item-text">{{event.title}}</h4>
+                                    <h5 class="list-group-item-text">{{event.location}}</h5>
+                                </div>
+                                <div class="col-sm-6">
+                                    <h5 class="list-group-item-text">{{event.date.toDateString()}}</h5>
+                                    <h5 class="list-group-item-text">Need: {{event.skillsNeeded}}</h5>
+                                </div>
+                                <a class="btn btn-primary pull-right" data-ng-href="/#/organizer/byEventId/{{event._id}}">
+                                    Detail
+                                </a>
+                            </div>
+                            <!--<div data-show-event-directive data-ng-if="showEvent"></div>-->
+
+
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+
+    </div>
+
+
+</section>
+

@@ -19,38 +19,70 @@
 <div ng-include src="'header.html'"></div>
 
 <main class="container">
-    <div class="row">
-        <div class="panel panel-default bootcards-media" data-ng-if="loggedIn()">
+    <div class="row" data-ng-if="loggedIn() && currentUser.userRole== 'organizer'">
+        <div class="panel panel-default bootcards-media">
             <div class="panel-footer">
                 <div class="btn-group btn-group-justified">
-                    <a class="btn-group" data-ng-href="/#/{{currentUser.userRole}}/{{currentUser.userId}}">
+                    <a class="btn-group" data-ng-href="/#/organizer/{{currentUser.userId}}">
                         <button class="btn btn-default">
                             Profile
                         </button>
                     </a>
 
-                    <div class="btn-group">
+                    <a class="btn-group" data-ng-href="/#/organizer/events/{{currentUser.profileInfo._id}}">
                         <button class="btn btn-default">
-                            Events
+                            My Events
                         </button>
-                    </div>
-                    <div class="btn-group">
+                    </a>
+                    <a class="btn-group" data-ng-href="/#/organizer/events/volunteers/{{currentUser.profileInfo._id}}">
+                        <button class="btn btn-default">
+                            Who Interest Me
+                        </button>
+                    </a>
+                    <a class="btn-group">
                         <button class="btn btn-default">
                             Messages
                         </button>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>
 
-        <section data-ng-view>
-        </section>
+    </div>
+    <div class="row" data-ng-if="loggedIn() && currentUser.userRole== 'volunteer'">
+        <div class="panel panel-default bootcards-media">
+            <div class="panel-footer">
+                <div class="btn-group btn-group-justified">
+                    <a class="btn-group" data-ng-href="/#/volunteer/{{currentUser.userId}}">
+                        <button class="btn btn-default">
+                            Profile
+                        </button>
+                    </a>
 
+                    <a class="btn-group" data-ng-href="/#/volunteer/events">
+                        <button class="btn btn-default">
+                            All Events
+                        </button>
+                    </a>
+                    <a class="btn-group" data-ng-href="/#/volunteer/events/{{currentUser.profileInfo._id}}">
+                        <button class="btn btn-default">
+                            My Event List
+                        </button>
+                    </a>
+                    <a class="btn-group">
+                        <button class="btn btn-default">
+                            Messages
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 
-
-
-
+    <div class="row">
+        <section data-ng-view>
+        </section>
+    </div>
 
 
 </main>

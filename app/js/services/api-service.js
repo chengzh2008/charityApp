@@ -35,6 +35,23 @@ module.exports = function (app) {
                     edit: function (userId, organizer) {
                         return request(restUrl + '/volunteers/' + userId, 'PUT', organizer);
                     }
+                },
+                Event: {
+                    getEventsByOrganizerId: function (profileId) {
+                        return request(restUrl + '/events/organizer/' + profileId, 'GET');
+                    },
+                    getEventByEventId: function (eventId) {
+                        return request(restUrl + '/events/byEventId/' + eventId, 'GET');
+                    },
+                    save: function (event) {
+                        return request(restUrl + '/events/', 'POST', event);
+                    },
+                    edit: function (eventId, event) {
+                        return request(restUrl + '/events/' + eventId, 'PUT', event);
+                    },
+                    remove: function (eventId) {
+                        return request(restUrl + '/events/' + eventId, 'DELETE');
+                    }
                 }
 
             };

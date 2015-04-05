@@ -13,6 +13,7 @@ module.exports = function (router, appSecret) {
 
     router.post('/events', eatAuth(appSecret), function (req, res) {
         var newEvent = new Event(req.body);
+        console.log('event object coming form the front', newEvent);
         newEvent.save(function (err, event) {
             if (err) {
                 return res.status(500).send({'msg': 'Could not save a blog'});
@@ -22,7 +23,29 @@ module.exports = function (router, appSecret) {
     });
 
     router.get('/events', eatAuth(appSecret), function (req, res) {
+
         Event.find({}, function (err, data) {
+            if (err) {
+                return res.status(500).send({'msg': 'Could not find events'});
+            }
+            res.json(data);
+        });
+    });
+
+    router.get('/events/byEventId/:eventId', eatAuth(appSecret), function (req, res) {
+
+        Event.findOne({_id: req.params.eventId}, function (err, data) {
+            if (err) {
+                return res.status(500).send({'msg': 'Could not find events'});
+            }
+
+            res.json(data);
+        });
+    });
+
+    router.get('/events/organizer/:profileId', eatAuth(appSecret), function (req, res) {
+
+        Event.find({organizerId: req.params.profileId}, function (err, data) {
             if (err) {
                 return res.status(500).send({'msg': 'Could not find events'});
             }
@@ -32,7 +55,7 @@ module.exports = function (router, appSecret) {
 
     router.put('/events/:id', eatAuth(appSecret), function (req, res) {
         var updatedEvent = req.body;
-        if (req.user.basic.email !== req.params.id) {
+        if (req.user.basic.email != req.params.id) {
             return res.status(500).send({'msg': 'unauthorized request'});
         }
         Event.update({organizerId: req.params.id}, updatedEvent, function (err, result) {
@@ -43,11 +66,8 @@ module.exports = function (router, appSecret) {
         });
     });
 
-    router.delete('/events/:id', eatAuth(appSecret), function (req, res) {
-        if (req.user.basic.email !== req.params.id) {
-            return res.status(500).send({'msg': 'unauthorized request'});
-        }
-        Event.remove({organizerId: req.params.id}, function (err, result) {
+    router.delete('/events/:eventId', eatAuth(appSecret), function (req, res) {
+        Event.remove({_id: req.params.eventId}, function (err, result) {
             if (err) {
                 return res.status(500).send({'msg': 'Could not find events'});
             }
