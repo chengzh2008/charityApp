@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function (app) {
-    app.controller('eventController', ['$scope', 'ApiService', '$cookies', '$location', '$routeParams', function ($scope, ApiService, $cookies, $location, $routeParams) {
+    app.controller('organizerEventListController', ['$scope', 'ApiService', '$cookies', '$location', '$routeParams', function ($scope, ApiService, $cookies, $location, $routeParams) {
 
         if (!$cookies.token || $cookies.token.length < 1)
             $location.path('/signup');
@@ -59,9 +59,12 @@ module.exports = function (app) {
                 });
         };
 
-        $scope.cancelAdd = function () {
-            $scope.toggleAddEvent();
-            //$scope.getEventsByOrganizerId();
+        $scope.cancel = function () {
+            if ($scope.edittingEvent) {
+                $scope.toggleEditEvent();
+            } else {
+                $scope.toggleAddEvent();
+            }
         };
 
         $scope.toggleEditEvent = function () {

@@ -17,7 +17,8 @@ require('./services/api-service')(helpOut);
 //controllers
 require('./organizer/controllers/organizer_controller')(helpOut);
 require('./volunteer/controllers/volunteer_controller')(helpOut);
-require('./event/controllers/event_controller')(helpOut);
+require('./event/controllers/organizer_event_list_controller')(helpOut);
+require('./event/controllers/organizer_single_event_controller')(helpOut);
 
 
 //directives
@@ -26,7 +27,7 @@ require('./event/controllers/event_controller')(helpOut);
 require('./organizer/directives/edit_profile_directive')(helpOut);
 require('./volunteer/directives/edit_volunteer_profile_directive')(helpOut);
 require('./event/directives/edit_event_directive')(helpOut);
-require('./event/directives/show_event_directive')(helpOut);
+//require('./event/directives/show_event_directive')(helpOut);
 
 
 
@@ -40,12 +41,13 @@ helpOut.config(['$routeProvider', function ($routeProvider) {
             templateUrl: 'templates/organizer/organizer_welcome.html',
             controller: 'organizerController'
         })
-        .when('/event/:profileId', {
-            templateUrl: 'templates/event/event_list.html',
-            controller: 'eventController'
+        .when('/organizer/events/:profileId', {
+            templateUrl: 'templates/event/organizer_event_list.html',
+            controller: 'organizerEventListController'
         })
-        .when('/event/organizer/:eventIndex', {
-            templateUrl: '../templates/event/directives/single_event.html'
+        .when('/organizer/byEventId/:eventId', {
+            templateUrl: '../templates/event/organizer_single_event.html',
+            controller: 'organizerSingleEventController'
         })
         .when('/about', {
             templateUrl: 'templates/about.html'
@@ -66,11 +68,11 @@ helpOut.config(['$routeProvider', function ($routeProvider) {
         })
 }]);
 
-},{"./../../bower_components/angular-base64/angular-base64.js":17,"./../../bower_components/angular/angular":18,"./event/controllers/event_controller":2,"./event/directives/edit_event_directive":3,"./event/directives/show_event_directive":4,"./organizer/controllers/organizer_controller":6,"./organizer/directives/edit_profile_directive":7,"./services/api-service":8,"./services/resource_service":9,"./users/users":14,"./volunteer/controllers/volunteer_controller":15,"./volunteer/directives/edit_volunteer_profile_directive":16,"angular-cookies":20,"angular-route":22}],2:[function(require,module,exports){
+},{"./../../bower_components/angular-base64/angular-base64.js":18,"./../../bower_components/angular/angular":19,"./event/controllers/organizer_event_list_controller":2,"./event/controllers/organizer_single_event_controller":3,"./event/directives/edit_event_directive":4,"./organizer/controllers/organizer_controller":7,"./organizer/directives/edit_profile_directive":8,"./services/api-service":9,"./services/resource_service":10,"./users/users":15,"./volunteer/controllers/volunteer_controller":16,"./volunteer/directives/edit_volunteer_profile_directive":17,"angular-cookies":21,"angular-route":23}],2:[function(require,module,exports){
 'use strict';
 
 module.exports = function (app) {
-    app.controller('eventController', ['$scope', 'ApiService', '$cookies', '$location', '$routeParams', function ($scope, ApiService, $cookies, $location, $routeParams) {
+    app.controller('organizerEventListController', ['$scope', 'ApiService', '$cookies', '$location', '$routeParams', function ($scope, ApiService, $cookies, $location, $routeParams) {
 
         if (!$cookies.token || $cookies.token.length < 1)
             $location.path('/signup');
@@ -128,9 +130,12 @@ module.exports = function (app) {
                 });
         };
 
-        $scope.cancelAdd = function () {
-            $scope.toggleAddEvent();
-            //$scope.getEventsByOrganizerId();
+        $scope.cancel = function () {
+            if ($scope.edittingEvent) {
+                $scope.toggleEditEvent();
+            } else {
+                $scope.toggleAddEvent();
+            }
         };
 
         $scope.toggleEditEvent = function () {
@@ -151,6 +156,67 @@ module.exports = function (app) {
 },{}],3:[function(require,module,exports){
 'use strict';
 
+module.exports = function (app) {
+    app.controller('organizerSingleEventController', ['$rootScope', '$scope', 'ApiService', '$cookies', '$location', '$routeParams', function ($rootScope, $scope, ApiService, $cookies, $location, $routeParams) {
+
+        if (!$cookies.token || $cookies.token.length < 1)
+            $location.path('/signup');
+
+        $scope.event = {};
+        $scope.newEvent = {};
+        $scope.edittingEvent = false;
+
+        $scope.getEvent = function () {
+            ApiService.Event.getEventByEventId($routeParams.eventId)
+                .success(function (data, status) {
+                    $scope.event = data;
+                })
+                .error(function (data) {
+                    $location.path('/');
+                });
+        };
+
+        $scope.edit = function (event) {
+            ApiService.Event.edit(event._id, event)
+                .success(function (data) {
+                    $scope.edittingProfile = false;
+                    //$scope.currentUser.profileInfo = data;
+                    $location.path('/organizer/event/' + event._id);
+                })
+                .error(function () {
+                    $location.path('/');
+                });
+        };
+
+        $scope.remove = function (eventId) {
+            ApiService.Event.remove(eventId)
+                .success(function (data) {
+                    $scope.edittingProfile = false;
+                    $location.path('/organizer/events/'+ $rootScope.currentUser.profileInfo._id);
+                })
+                .error(function () {
+                    $location.path('/');
+                });
+        };
+
+        $scope.cancel = function () {
+            if ($scope.edittingEvent) {
+                $scope.toggleEditEvent();
+            } else {
+                $scope.toggleAddEvent();
+            }
+        };
+
+        $scope.toggleEditEvent = function () {
+            $scope.edittingEvent = !$scope.edittingEvent;
+        };
+
+    }]);
+};
+
+},{}],4:[function(require,module,exports){
+'use strict';
+
 module.exports = function(app) {
     app.directive('editEventDirective', function() {
         return {
@@ -161,7 +227,7 @@ module.exports = function(app) {
     });
 };
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 module.exports = function(app) {
@@ -174,14 +240,14 @@ module.exports = function(app) {
     });
 };
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 module.exports = function() {
   return 'hello universe';
 };
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 module.exports = function (app) {
@@ -226,7 +292,7 @@ module.exports = function (app) {
     }]);
 };
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 module.exports = function(app) {
@@ -239,7 +305,7 @@ module.exports = function(app) {
     });
 };
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 module.exports = function (app) {
@@ -280,7 +346,10 @@ module.exports = function (app) {
                 },
                 Event: {
                     getEventsByOrganizerId: function (profileId) {
-                        return request(restUrl + '/events/' + profileId, 'GET');
+                        return request(restUrl + '/events/organizer/' + profileId, 'GET');
+                    },
+                    getEventByEventId: function (eventId) {
+                        return request(restUrl + '/events/byEventId/' + eventId, 'GET');
                     },
                     save: function (event) {
                         return request(restUrl + '/events/', 'POST', event);
@@ -289,14 +358,14 @@ module.exports = function (app) {
                         return request(restUrl + '/events/' + eventId, 'PUT', event);
                     },
                     remove: function (eventId) {
-                        return request(restUrl + '/events' + eventId, 'DELETE');
+                        return request(restUrl + '/events/' + eventId, 'DELETE');
                     }
                 }
 
             };
         }]);
 };
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 module.exports = function(app) {
@@ -376,7 +445,7 @@ module.exports = function(app) {
   }]);
 };
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 module.exports = function (app) {
@@ -416,7 +485,7 @@ module.exports = function (app) {
 
 
 }
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 module.exports = function (app) {
@@ -442,7 +511,7 @@ module.exports = function (app) {
     }]);
 };
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 module.exports = function (app) {
@@ -470,7 +539,7 @@ module.exports = function (app) {
     }]);
 };
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict';
 
 module.exports = function(app) {
@@ -483,7 +552,7 @@ module.exports = function(app) {
     });
 };
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
 module.exports = function(app) {
@@ -501,7 +570,7 @@ module.exports = function(app) {
   require('./controllers/signin_controller')(app);
 };
 
-},{"./controllers/signin_controller":11,"./controllers/signup_controller":12}],15:[function(require,module,exports){
+},{"./controllers/signin_controller":12,"./controllers/signup_controller":13}],16:[function(require,module,exports){
 'use strict';
 
 module.exports = function (app) {
@@ -547,7 +616,7 @@ module.exports = function (app) {
     }]);
 };
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 module.exports = function(app) {
@@ -560,7 +629,7 @@ module.exports = function(app) {
     });
 };
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 (function() {
     'use strict';
 
@@ -728,7 +797,7 @@ module.exports = function(app) {
 
 })();
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 /**
  * @license AngularJS v1.3.15
  * (c) 2010-2014 Google, Inc. http://angularjs.org
@@ -27038,7 +27107,7 @@ var minlengthDirective = function() {
 })(window, document);
 
 !window.angular.$$csp() && window.angular.element(document).find('head').prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}</style>');
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 /**
  * @license AngularJS v1.3.15
  * (c) 2010-2014 Google, Inc. http://angularjs.org
@@ -27246,11 +27315,11 @@ angular.module('ngCookies', ['ng']).
 
 })(window, window.angular);
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 require('./angular-cookies');
 module.exports = 'ngCookies';
 
-},{"./angular-cookies":19}],21:[function(require,module,exports){
+},{"./angular-cookies":20}],22:[function(require,module,exports){
 /**
  * @license AngularJS v1.3.15
  * (c) 2010-2014 Google, Inc. http://angularjs.org
@@ -28241,8 +28310,8 @@ function ngViewFillContentFactory($compile, $controller, $route) {
 
 })(window, window.angular);
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 require('./angular-route');
 module.exports = 'ngRoute';
 
-},{"./angular-route":21}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
+},{"./angular-route":22}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]);

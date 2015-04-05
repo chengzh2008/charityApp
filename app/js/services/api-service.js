@@ -38,7 +38,10 @@ module.exports = function (app) {
                 },
                 Event: {
                     getEventsByOrganizerId: function (profileId) {
-                        return request(restUrl + '/events/' + profileId, 'GET');
+                        return request(restUrl + '/events/organizer/' + profileId, 'GET');
+                    },
+                    getEventByEventId: function (eventId) {
+                        return request(restUrl + '/events/byEventId/' + eventId, 'GET');
                     },
                     save: function (event) {
                         return request(restUrl + '/events/', 'POST', event);
@@ -47,7 +50,7 @@ module.exports = function (app) {
                         return request(restUrl + '/events/' + eventId, 'PUT', event);
                     },
                     remove: function (eventId) {
-                        return request(restUrl + '/events' + eventId, 'DELETE');
+                        return request(restUrl + '/events/' + eventId, 'DELETE');
                     }
                 }
 

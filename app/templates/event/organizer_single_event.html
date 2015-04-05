@@ -1,0 +1,75 @@
+<section data-ng-controller="organizerSingleEventController" data-ng-init="getEvent()">
+    <div data-edit-event-directive data-ng-if="edittingEvent"></div>
+
+
+    <div class="panel panel-default" data-ng-if="!edittingEvent">
+
+        <div class="panel-heading clearfix">
+
+            <div class="btn-group pull-right">
+                <button class="btn btn-success" data-ng-click="toggleEditEvent()">
+                    Edit
+                </button>
+            </div>
+
+            <h3 class="modal-title">Event</h3>
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+                    <div class="list-group-item">
+                        <img src="{{event.imgUrl}}" class="fa fa-2x fa-building-o pull-left"/>
+                        <label>Title</label>
+                        <h4 class="list-group-item-heading">{{event.title}}</h4>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">Location</label>
+
+                        <div class="col-xs-10">
+                            <p class="form-control">{{event.location}}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">Date</label>
+                        <div class="col-xs-10">
+                            <p class="form-control">{{event.date}}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">Description</label>
+
+                        <div class="col-xs-10">
+                            <textarea class="form-control">{{event.description}}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">Skills Needed</label>
+
+                        <div class="col-xs-10">
+                            <p class="form-control">{{event.skillsNeeded}}</p>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-danger btn-block" data-ng-click="remove(event._id)">
+                    <i class="fa fa-trash-o"></i>
+                    Delete Event
+                </button>
+            </div>
+        </div>
+
+
+    </div>
+</section>
+
+
+
+
+
+

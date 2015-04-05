@@ -10,12 +10,12 @@
         </div>
 
         <div class="btn-group pull-right">
-            <button class="btn btn-success" data-ng-click="addingEvent? save(newEvent) : edit()">
+            <button class="btn btn-success" data-ng-click="addingEvent? save(newEvent) : edit(newEvent)">
                 Save
             </button>
         </div>
 
-        <h3 class="modal-title">New Event</h3>
+        <h3 class="modal-title">Event Detail</h3>
 
         <div class="modal-body">
             <form class="form-horizontal">
@@ -71,12 +71,12 @@
         </div>
 
 
-        <div class="modal-footer" data-ng-if="!addingEvent">
-            <button type="submit" class="btn btn-danger btn-block" data-ng-click="delete(currentUser.profileInfo)">
-                <i class="fa fa-trash-o"></i>
-                Delete Event
-            </button>
-        </div>
+        <!--<div class="modal-footer" data-ng-if="!addingEvent">-->
+            <!--<button type="submit" class="btn btn-danger btn-block" data-ng-click="delete(currentUser.profileInfo)">-->
+                <!--<i class="fa fa-trash-o"></i>-->
+                <!--Delete Event-->
+            <!--</button>-->
+        <!--</div>-->
 
     </div>
 
