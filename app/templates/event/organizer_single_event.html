@@ -1,5 +1,5 @@
 <section data-ng-controller="organizerSingleEventController" data-ng-init="getEvent()">
-    <div data-edit-event-directive data-ng-if="edittingEvent"></div>
+    <div data-edit-event-directive new-event="event" save="save" cancel="cancel" data-ng-if="edittingEvent"></div>
 
 
     <div class="panel panel-default" data-ng-if="!edittingEvent">

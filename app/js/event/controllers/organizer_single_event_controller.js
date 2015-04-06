@@ -20,12 +20,12 @@ module.exports = function (app) {
                 });
         };
 
-        $scope.edit = function (event) {
+        $scope.save = function (event) {
             ApiService.Event.edit(event._id, event)
                 .success(function (data) {
-                    $scope.edittingProfile = false;
+                    $scope.edittingEvent = false;
                     //$scope.currentUser.profileInfo = data;
-                    $location.path('/organizer/event/' + event._id);
+                    $location.path('/organizer/byEventId/' + event._id);
                 })
                 .error(function () {
                     $location.path('/');
@@ -35,7 +35,7 @@ module.exports = function (app) {
         $scope.remove = function (eventId) {
             ApiService.Event.remove(eventId)
                 .success(function (data) {
-                    $scope.edittingProfile = false;
+                    $scope.edittingEvent = false;
                     $location.path('/organizer/events/'+ $rootScope.currentUser.profileInfo._id);
                 })
                 .error(function () {
@@ -44,11 +44,8 @@ module.exports = function (app) {
         };
 
         $scope.cancel = function () {
-            if ($scope.edittingEvent) {
                 $scope.toggleEditEvent();
-            } else {
-                $scope.toggleAddEvent();
-            }
+                //$location.path('/organizer/byEventId/' + $routeParams.eventId);
         };
 
         $scope.toggleEditEvent = function () {

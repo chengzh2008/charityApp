@@ -100,6 +100,7 @@ module.exports = function (app) {
                     console.log('after saved', data);
                     $scope.addingEvent = false;
                     $scope.eventList.push(data);
+                    $scope.newEvent = {};
                 })
                 .error(function () {
                     $location.path('/');
@@ -118,29 +119,25 @@ module.exports = function (app) {
                 });
         };
 
-        $scope.remove = function (index) {
-            ApiService.Event.remove($routeParams.profileId)
-                .success(function (data) {
-                    $scope.edittingProfile = false;
-                    //$scope.currentUser.profileInfo = data;
-
-                })
-                .error(function () {
-                    $location.path('/');
-                });
-        };
+        //$scope.remove = function (index) {
+        //    ApiService.Event.remove($routeParams.profileId)
+        //        .success(function (data) {
+        //            $scope.edittingProfile = false;
+        //            //$scope.currentUser.profileInfo = data;
+        //
+        //        })
+        //        .error(function () {
+        //            $location.path('/');
+        //        });
+        //};
 
         $scope.cancel = function () {
-            if ($scope.edittingEvent) {
                 $scope.toggleEditEvent();
-            } else {
-                $scope.toggleAddEvent();
-            }
         };
 
-        $scope.toggleEditEvent = function () {
-            $scope.edittingEvent = !$scope.edittingEvent;
-        };
+        //$scope.toggleEditEvent = function () {
+        //    $scope.edittingEvent = !$scope.edittingEvent;
+        //};
 
         $scope.toggleAddEvent = function () {
             $scope.addingEvent = !$scope.addingEvent;
@@ -176,12 +173,12 @@ module.exports = function (app) {
                 });
         };
 
-        $scope.edit = function (event) {
+        $scope.save = function (event) {
             ApiService.Event.edit(event._id, event)
                 .success(function (data) {
-                    $scope.edittingProfile = false;
+                    $scope.edittingEvent = false;
                     //$scope.currentUser.profileInfo = data;
-                    $location.path('/organizer/event/' + event._id);
+                    $location.path('/organizer/byEventId/' + event._id);
                 })
                 .error(function () {
                     $location.path('/');
@@ -191,7 +188,7 @@ module.exports = function (app) {
         $scope.remove = function (eventId) {
             ApiService.Event.remove(eventId)
                 .success(function (data) {
-                    $scope.edittingProfile = false;
+                    $scope.edittingEvent = false;
                     $location.path('/organizer/events/'+ $rootScope.currentUser.profileInfo._id);
                 })
                 .error(function () {
@@ -200,11 +197,8 @@ module.exports = function (app) {
         };
 
         $scope.cancel = function () {
-            if ($scope.edittingEvent) {
                 $scope.toggleEditEvent();
-            } else {
-                $scope.toggleAddEvent();
-            }
+                //$location.path('/organizer/byEventId/' + $routeParams.eventId);
         };
 
         $scope.toggleEditEvent = function () {
@@ -222,7 +216,21 @@ module.exports = function(app) {
         return {
             restrict: 'A',
             templateUrl: '/templates/event/directives/edit_event_directive.html',
-            replace: true
+            replace: true,
+            scope: {
+                newEvent: '=newEvent',
+                save: '&',
+                cancel: '&'
+            },
+            controller: function ($scope) {
+                $scope.saveEvent = function () {
+                    console.log('test click save button');
+                    $scope.save()($scope.newEvent);
+                };
+                $scope.cancelEvent = function () {
+                    $scope.cancel()();
+                }
+            }
         }
     });
 };

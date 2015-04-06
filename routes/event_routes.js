@@ -53,12 +53,10 @@ module.exports = function (router, appSecret) {
         });
     });
 
-    router.put('/events/:id', eatAuth(appSecret), function (req, res) {
+    router.put('/events/:eventId', eatAuth(appSecret), function (req, res) {
         var updatedEvent = req.body;
-        if (req.user.basic.email != req.params.id) {
-            return res.status(500).send({'msg': 'unauthorized request'});
-        }
-        Event.update({organizerId: req.params.id}, updatedEvent, function (err, result) {
+
+        Event.update({_id: req.params.eventId}, updatedEvent, function (err, result) {
             if (err) {
                 return res.status(500).send({'msg': 'Could not find events'});
             }
