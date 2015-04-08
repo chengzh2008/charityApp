@@ -33,10 +33,28 @@ body {
   border-radius: 2px;
   border-bottom: 1px solid #ccb20a;
   margin: .5em;
+  a img {
+    width: 100px;
+    height: 100px;
+  }
 }
 
 .contactIcon {
   display: inline-block;
   width: 100px;
   height: 100px;
+}
+
+.teamBox section {
+  width: 30%;
+  float: left;
+}
+
+.headshot {
+  width: 200px;
+  height: 200px;
+}
+
+.copyright, footer h3 {
+  text-align: center;
 }
