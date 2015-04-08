@@ -29,4 +29,16 @@ footer {
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important; }
 
+.team {
+  padding: .5em;
+  background-color: #fff;
+  border-radius: 2px;
+  border-bottom: 1px solid #ccb20a;
+  margin: .5em; }
+
+.contactIcon {
+  display: inline-block;
+  width: 100px;
+  height: 100px; }
+
 /*# sourceMappingURL=main.css.map */
