@@ -3,8 +3,8 @@
 
 Created by Melissa, Zhihong.
 
-#Demo:
-	helpyouhelpme.herokuapp.com
+[Demo](helpyouhelpme.herokuapp.com)
+	
 	
 ## A web application:
 An app for organizer and volunteer to find each other easier. For this app, there are two types of users: volunteer and organizer. Organizers can create events. Volunteers can search for events match their interest and skills. Volunteers can post messages regarding a particular event and organizer can response it.
