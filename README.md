@@ -3,7 +3,7 @@
 
 Created by Melissa, Zhihong.
 
-[Demo](helpyouhelpme.herokuapp.com)
+[Demo HelpOut](https://helpyouhelpme.herokuapp.com)
 	
 	
 ## A web application:
